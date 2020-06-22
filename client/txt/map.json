@@ -1,0 +1,17 @@
+{
+    "name": "Default map",
+    "TDR": "TDR-1",
+    "PTDR": null,
+    "layers": [
+        [
+            {
+                "id": "grass",
+                "x": 0,
+                "y": 0,
+                "metadata": {
+                    
+                }
+            }
+        ]
+    ]
+}
