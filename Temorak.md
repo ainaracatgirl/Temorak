@@ -1,6 +1,6 @@
 **[Disconnect-Codes]**
  - [3000] Policy/protocol violation
- - [3001] Not authorized on login
+ - [3001] Not authorized on login / Auto reconnect
 
 [19-06-2020]
 - Created barebones project
@@ -19,3 +19,6 @@
 [22-06-2020] *TDR-1 PTDR-1*
 - Added safe client list removal
 - Found & solved the **null** username bug.
+- Solved 2 players with same username online.
+- Added production webpage in GitHub Pages.
+- No development webpage will be created. Use the *PHP WebServer* instead.

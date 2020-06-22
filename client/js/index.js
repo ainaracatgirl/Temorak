@@ -51,14 +51,7 @@ let communication = {
     lastHost: null,
     lastPort: null,
     connect: function(host, port=80) {
-        document.getElementById('modalInputUsername').value = "";
-        document.getElementById('modalInputUsername').disabled = false;
-        document.getElementById('userSendBtn').disabled = false;
-        document.getElementById('modalInputPassword0').value = "";
-        document.getElementById('modalInputPassword1').value = "";
-        document.getElementById('modalInputPassword2').value = "";
-        document.getElementById('modalInputCreate').hidden = true;
-        document.getElementById('modalInputPassword').hidden = true;
+        this.reset();
 
         this.socket = new WebSocket("ws://" + host + ":" + port);
         this.socket.onopen = this.oninit;
@@ -67,6 +60,16 @@ let communication = {
         this.socket.onclose = this.onclose;
         this.lastHost = host;
         this.lastPort = port;
+    },
+    reset: function() {
+        document.getElementById('modalInputUsername').value = "";
+        document.getElementById('modalInputUsername').disabled = false;
+        document.getElementById('userSendBtn').disabled = false;
+        document.getElementById('modalInputPassword0').value = "";
+        document.getElementById('modalInputPassword1').value = "";
+        document.getElementById('modalInputPassword2').value = "";
+        document.getElementById('modalInputCreate').hidden = true;
+        document.getElementById('modalInputPassword').hidden = true;
     },
     reconnect: function() {
         this.connect(this.lastHost, this.lastPort);
@@ -113,6 +116,7 @@ let communication = {
     onmessage: function(e) {
         if (e.data.startsWith('[VERSION] ')) {
             if (e.data.substr(10) == communication.TDR) {
+                communication.reset();
                 modal('modalInputUser').show();
             } else {
                 this.close(3000, "TDR or PTDR not matching");
@@ -132,7 +136,9 @@ let communication = {
         if (e.code == 3001) {
             communication.reconnect();
         } else {
-            document.getElementById('modalDisconnectedCode').innerText = document.getElementById('modalDisconnectedCode').innerText.replace('%code%', e.code);
+            communication.reset();
+
+            document.getElementById('modalDisconnectedCode').innerText = "Disconnected (" + e.code + ")";
             if (e.reason && e.reason.trim() != "") {
                 document.getElementById('modalDisconnectedMessage').innerText = e.reason;
                 replaceWithFormatting(document.getElementById('modalDisconnectedMessage'));

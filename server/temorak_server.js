@@ -47,7 +47,7 @@ if (!module.parent) {
             let CONTENT_CODE = fs.readFileSync('content.js') + '';
             eval(CONTENT_CODE);
             clients.forEach(client => {
-                content.oninit(client);
+                client.close(3001, "Auto reconnect");
             });
             console.log('[>] Request-Accpeted');
         }

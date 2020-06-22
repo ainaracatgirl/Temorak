@@ -34,6 +34,17 @@ function sendAll(message, exclude=null) {
     }
 }
 
+function clientHasName(name) {
+    for (let i = 0; i < clients.length; i++) {
+        if (clients[i].userData && clients[i].userData.joined) {
+            if (clients[i].userData.username == name) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 content = {
     oninit: function(ws) {
         ws.userData = {
@@ -50,20 +61,24 @@ content = {
             if (ws.userData.uDataSet) {
                 ws.close(3000, "User data updates are only valid when asked for");
             } else {
-                ws.userData.username = message.substr(11);
-                ws.userData.uDataSet = true;
-
-                if (validUsername(ws.userData.username)) {
-                    if (fs.existsSync("users/" + ws.userData.username + ".dat")) {
-                        let data = JSON.parse(fs.readFileSync("users/" + ws.userData.username + ".dat") + '');
-                        ws.userData.operator = data.operator;
-                        ws.userData.passwordHash = data.passwordHash;
-                        ws.send("[AUTH] VALIDATE");
+                if (!clientHasName(message.substr(11))) {
+                    ws.userData.username = message.substr(11);
+                    ws.userData.uDataSet = true;
+    
+                    if (validUsername(ws.userData.username)) {
+                        if (fs.existsSync("users/" + ws.userData.username + ".dat")) {
+                            let data = JSON.parse(fs.readFileSync("users/" + ws.userData.username + ".dat") + '');
+                            ws.userData.operator = data.operator;
+                            ws.userData.passwordHash = data.passwordHash;
+                            ws.send("[AUTH] VALIDATE");
+                        } else {
+                            ws.send("[AUTH] CREATE");
+                        }
                     } else {
-                        ws.send("[AUTH] CREATE");
+                        ws.close(3000, "Username can't be <b>" + ws.userData.username + "</b>");
                     }
                 } else {
-                    ws.close(3000, "Username can't be <b>" + ws.userData.username + "</b>");
+                    ws.close(3000, "Player <b>" + message.substr(11) + "</b> is already playing on this server.");
                 }
             }
         } else if (message.startsWith('[AUTH] ')) {
