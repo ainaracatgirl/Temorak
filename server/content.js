@@ -24,6 +24,18 @@ function hashPassword(pass) {
     return gen_hash;
 }
 
+function playerNames() {
+    let str = "";
+
+    for (let i = 0; i < clients.length; i++) {
+        if (clients[i].userData && clients[i].userData.joined) {
+            str += clients[i].userData.username + " ";
+        }
+    }
+
+    return str;
+}
+
 function sendAll(message, exclude=null) {
     for (let i = 0; i < clients.length; i++) {
         if (clients[i].userData && clients[i].userData.joined) {
@@ -54,7 +66,7 @@ content = {
             operator: false,
             passwordHash: undefined
         };
-        ws.send('[VERSION] TDR-1 PTDR-1');
+        ws.send('[VERSION] TDR-1 PTDR-2');
     },
     onmessage: function(ws, message) {
         if (message.startsWith('[USER-SET] ')) {
@@ -90,19 +102,25 @@ content = {
                     ws.userData.passwordHash = pass;
                     ws.userData.joined = true;
                     save(ws);
-                    ws.send("[AUTH-OK]");
+                    ws.send("[AUTH-OK] " + playerNames());
                     sendAll("[USER-JOINED] " + ws.userData.username);
+                    sendAll("[CHAT] " + ws.userData.username + " joined!");
                     console.log("[USER-JOINED]", ws.userData);
                 } else {
                     if (ws.userData.passwordHash != pass) {
                         ws.close(3001, "Incorrect credentials");
                     } else {
                         ws.userData.joined = true;
-                        ws.send("[AUTH-OK]");
+                        ws.send("[AUTH-OK] " + playerNames());
                         sendAll("[USER-JOINED] " + ws.userData.username);
+                        sendAll("[CHAT] " + ws.userData.username + " joined!");
                         console.log("[USER-JOINED]", ws.userData);
                     }
                 }
+            }
+        } else if (message.startsWith('[CHAT] ')) {
+            if (ws.userData.joined) {
+                sendAll("[CHAT] " + ws.userData.username + ": " + message.substr(7));
             }
         } else {
             console.log(message);
@@ -114,6 +132,7 @@ content = {
     onclose: function(ws, code) {
         if (ws.userData.joined) {
             sendAll("[USER-LEFT] " + ws.userData.username);
+            sendAll("[CHAT] " + ws.userData.username + " left!");
             console.log("[USER-LEFT]", ws.userData)
         }
         clients.remove(ws);

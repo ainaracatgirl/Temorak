@@ -34,16 +34,8 @@ let mainloop = {
     },
     // render function
     render: function(timeInstant) {
-        ctx.fillStyle = "black";
-
+        ctx.fillStyle = "skyblue";
         ctx.fillRect(0, 0, dimensions.width, dimensions.height);
-
-        ctx.fillStyle = "white";
-        for (let y = 0; y < dimensions.tilesY; y++) {
-            for (let x = 0; x < dimensions.tilesX; x++) {
-                ctx.fillRect(x * dimensions.tileSize, y * dimensions.tileSize, dimensions.tileSize, dimensions.tileSize);
-            }
-        }
 
         mainloop.fps++;
     }

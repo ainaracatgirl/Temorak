@@ -46,7 +46,8 @@ function replaceWithFormatting(element) {
 }
 
 let communication = {
-    TDR: "TDR-1 PTDR-1",
+    TDR: "TDR-1 PTDR-2",
+    onlineUsers: [],
     socket: null,
     lastHost: null,
     lastPort: null,
@@ -94,6 +95,35 @@ let communication = {
             modal('modalInputUser').hide();
         }
     },
+    removeUser: function(username) {
+        for (let i = 0; i < communication.onlineUsers.length; i++) {
+            if (communication.onlineUsers[i].username = username) {
+                communication.onlineUsers.remove(communication.onlineUsers[i]);
+                return;
+            }
+        }
+    },
+    hasUsername: function(username) {
+        for (let i = 0; i < communication.onlineUsers.length; i++) {
+            if (communication.onlineUsers[i].username == username) {
+                return true;
+            }
+        }
+
+        return false;
+    },
+    playersFromAuth: function(message) {
+        let split = message.split(' ');
+        let players = [];
+
+        for (let i = 1; i < split.length; i++) {
+            if (split[i].trim() != "") {
+                players.push({username: split[i], x: 0, y: 0});
+            }
+        }
+
+        return players;
+    },
     createPasswordInput: function() {
         let pass1 = document.getElementById('modalInputPassword1').value;
         let pass2 = document.getElementById('modalInputPassword2').value;
@@ -125,6 +155,16 @@ let communication = {
             document.getElementById('modalInputCreate').hidden = false;
         } else if (e.data.startsWith('[AUTH] VALIDATE')) {
             document.getElementById('modalInputPassword').hidden = false;
+        } else if (e.data.startsWith('[AUTH-OK]')) {
+            communication.onlineUsers = communication.playersFromAuth(e.data);
+        } else if (e.data.startsWith('[USER-JOINED] ')) {
+            if (!communication.hasUsername(e.data.split(' ')[1])) {
+                communication.onlineUsers.push({username: e.data.split(' ')[1], x: 0, y: 0});
+            }
+        } else if (e.data.startsWith('[USER-LEFT] ')) {
+            communication.removeUser(e.data.split(' ')[1]);
+        } else if (e.data.startsWith('[CHAT] ')) {
+            console.log(e.data.substr(7));
         } else {
             console.log(e);
         }

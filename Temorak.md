@@ -22,3 +22,11 @@
 - Solved 2 players with same username online.
 - Added production webpage in GitHub Pages.
 - No development webpage will be created. Use the *PHP WebServer* instead.
+
+[24-06-2020] *TDR-1 PTDR-2*
+- Added client knowledge of the online users
+    {username: String, x: Float, y: Float}
+- *BUG-FIX* When a close event ocurrs, reconnect can fail.
+- Added chat
+- Added join & leave messages
+- Switched the background color to 'skyblue'
