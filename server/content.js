@@ -1,7 +1,3 @@
-function save(ws) {
-    fs.writeFileSync("users/" + ws.userData.username + ".dat", JSON.stringify(ws.userData));
-}
-
 Array.prototype.remove = function() {
     var what, a = arguments, L = a.length, ax;
     while (L && this.length) {
@@ -64,9 +60,11 @@ content = {
             usernameSet: false,
             username: null,
             operator: false,
-            passwordHash: undefined
+            passwordHash: undefined,
+            x: 0,
+            y: 0
         };
-        ws.send('[VERSION] TDR-1 PTDR-2');
+        ws.send('[VERSION] TDR-1 PTDR-3');
     },
     onmessage: function(ws, message) {
         if (message.startsWith('[USER-SET] ')) {
@@ -82,6 +80,8 @@ content = {
                             let data = JSON.parse(fs.readFileSync("users/" + ws.userData.username + ".dat") + '');
                             ws.userData.operator = data.operator;
                             ws.userData.passwordHash = data.passwordHash;
+                            ws.userData.x = data.x;
+                            ws.userData.y = data.y;
                             ws.send("[AUTH] VALIDATE");
                         } else {
                             ws.send("[AUTH] CREATE");
@@ -105,7 +105,7 @@ content = {
                     ws.send("[AUTH-OK] " + playerNames());
                     sendAll("[USER-JOINED] " + ws.userData.username);
                     sendAll("[CHAT] " + ws.userData.username + " joined!");
-                    console.log("[USER-JOINED]", ws.userData);
+                    sendAll("[STATE] " + ws.userData.username + " " + ws.userData.x + " " + ws.userData.y);
                 } else {
                     if (ws.userData.passwordHash != pass) {
                         ws.close(3001, "Incorrect credentials");
@@ -114,13 +114,23 @@ content = {
                         ws.send("[AUTH-OK] " + playerNames());
                         sendAll("[USER-JOINED] " + ws.userData.username);
                         sendAll("[CHAT] " + ws.userData.username + " joined!");
-                        console.log("[USER-JOINED]", ws.userData);
+                        sendAll("[STATE] " + ws.userData.username + " " + ws.userData.x + " " + ws.userData.y);
                     }
                 }
             }
         } else if (message.startsWith('[CHAT] ')) {
             if (ws.userData.joined) {
                 sendAll("[CHAT] " + ws.userData.username + ": " + message.substr(7));
+            }
+        } else if (message.startsWith('[STATE] ')) {
+            let split = message.split(" ");
+            let x = parseFloat(split[1]) + ws.userData.x;
+            let y = parseFloat(split[2]) + ws.userData.y;
+            ws.userData.x = x;
+            ws.userData.y = y;
+            save(ws);
+            if (ws.userData.joined) {
+                sendAll("[STATE] " + ws.userData.username + " " + x + " " + y);
             }
         } else {
             console.log(message);
@@ -133,7 +143,6 @@ content = {
         if (ws.userData.joined) {
             sendAll("[USER-LEFT] " + ws.userData.username);
             sendAll("[CHAT] " + ws.userData.username + " left!");
-            console.log("[USER-LEFT]", ws.userData)
         }
         clients.remove(ws);
     }

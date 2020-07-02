@@ -14,6 +14,12 @@
     <div id="fps-tps-counter" class="floating floating-left">TPS: 00 FPS: 00</div>
     <img id="keyboard-mouse-icon" src="img/keyboard-mouse.png" class="floating floating-right" width="64" height="64"></img>
     <img id="gamepad-icon" src="img/gamepad.png" class="floating floating-right floating-y64" width="64" height="64" hidden></img>
+    
+    <div class="floating floating-left floating-y32 size-y128" style="background-color: rgba(65, 65, 65, 0.5); color: rgba(255, 255, 255, 0.75);">
+        <div id="chat-div" style="height: 108px; overflow-y: scroll; overflow-x: hidden; overflow-wrap: break-word;"></div>
+        <div id="chat-message-div" contenteditable="true" style="margin-bottom: 0px; padding-bottom: 0px; background-color: rgba(65, 65, 65, 0.1);"></div>
+    </div>
+    
     <canvas id="content" width="0" height="0" class="floating-fixed">
         So sorry! Apparently your browser does not support HTML5 Canvas. Maybe try Chrome? Firefox? Chromium?
     </canvas>

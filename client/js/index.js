@@ -22,6 +22,12 @@ Array.prototype.remove = function() {
     }
     return this;
 };
+String.prototype.replaceAll = function(search, replace='') {
+    return this.split(search).join(replace);
+};
+String.prototype.contains = function(search) {
+    return this.indexOf(search) != -1;
+};
 
 function replaceWithFormatting(element) {
     element.innerHTML = element.innerHTML.replace('&lt;b&gt;', '<b>').replace('&lt;/b&gt;', '</b>');
@@ -46,8 +52,10 @@ function replaceWithFormatting(element) {
 }
 
 let communication = {
-    TDR: "TDR-1 PTDR-2",
+    TDR: "TDR-1 PTDR-3",
     onlineUsers: [],
+    localUsername: null,
+    resendState: false,
     socket: null,
     lastHost: null,
     lastPort: null,
@@ -63,6 +71,7 @@ let communication = {
         this.lastPort = port;
     },
     reset: function() {
+        this.localUsername = null;
         document.getElementById('modalInputUsername').value = "";
         document.getElementById('modalInputUsername').disabled = false;
         document.getElementById('userSendBtn').disabled = false;
@@ -82,6 +91,7 @@ let communication = {
         } else {
             document.getElementById('modalInputUsername').disabled = true;
             document.getElementById('userSendBtn').disabled = true;
+            this.localUsername = username;
             this.socket.send("[USER-SET] " + username);
         }
     },
@@ -97,8 +107,8 @@ let communication = {
     },
     removeUser: function(username) {
         for (let i = 0; i < communication.onlineUsers.length; i++) {
-            if (communication.onlineUsers[i].username = username) {
-                communication.onlineUsers.remove(communication.onlineUsers[i]);
+            if (communication.onlineUsers[i].username == username) {
+                communication.onlineUsers.splice(i, 1);
                 return;
             }
         }
@@ -159,12 +169,25 @@ let communication = {
             communication.onlineUsers = communication.playersFromAuth(e.data);
         } else if (e.data.startsWith('[USER-JOINED] ')) {
             if (!communication.hasUsername(e.data.split(' ')[1])) {
+                this.resendState = true;
                 communication.onlineUsers.push({username: e.data.split(' ')[1], x: 0, y: 0});
             }
         } else if (e.data.startsWith('[USER-LEFT] ')) {
             communication.removeUser(e.data.split(' ')[1]);
+        } else if (e.data.startsWith('[STATE] ')) {
+            let name = e.data.split(' ')[1];
+            let x = parseFloat(e.data.split(' ')[2]);
+            let y = parseFloat(e.data.split(' ')[3]);
+
+            communication.onlineUsers.forEach(user => {
+                if (user.username == name) {
+                    user.x = x;
+                    user.y = y;
+                }
+            });
         } else if (e.data.startsWith('[CHAT] ')) {
-            console.log(e.data.substr(7));
+            document.getElementById('chat-div').innerText += e.data.substr(7) + "\r\n";
+            document.getElementById('chat-div').scrollTop = document.getElementById('chat-div').scrollHeight;
         } else {
             console.log(e);
         }
@@ -173,6 +196,7 @@ let communication = {
         console.error(e);
     },
     onclose: function(e) {
+        document.getElementById('chat-div').innerText = "";
         if (e.code == 3001) {
             communication.reconnect();
         } else {
@@ -219,6 +243,20 @@ if (location.search != "") {
 }
 
 document.addEventListener('readystatechange', function(event) {
+    document.getElementById('chat-message-div').onkeydown = function(e) {
+        if (e.key == "Enter") {
+            let message = document.getElementById('chat-message-div').innerText.replaceAll('\n', '').replaceAll('\r', '');
+            
+            setTimeout(function() {
+                document.getElementById('chat-message-div').innerText = "";
+            }, 2);
+
+            if (communication.socket.readyState == 1 && message.trim() != "") {
+                communication.socket.send("[CHAT] " + message);
+            }
+        }
+    };
+
     index.startGame();
 }, false);
 

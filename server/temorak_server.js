@@ -39,8 +39,14 @@ function onConnect(ws) {
     });
 }
 
+function save(ws) {
+    fs.writeFileSync("users/" + ws.userData.username + ".dat", JSON.stringify(ws.userData));
+}
+
 if (!module.parent) {
     var stdin = process.openStdin();
+    let server = undefined;
+    let listen = undefined;
 
     stdin.addListener("data", function(d) {
         if (d.toString().trim() == 'Request-Content-Reset') {
@@ -50,11 +56,49 @@ if (!module.parent) {
                 client.close(3001, "Auto reconnect");
             });
             console.log('[>] Request-Accpeted');
+        } else if (d.toString().trim().startsWith("Set-Operator ")) {
+            let user = d.toString().trim().substr(13);
+            let found = false;
+            clients.forEach(ws => {
+                if (ws.userData.username == user) {
+                    ws.userData.operator = true;
+                    ws.send("[CHAT] [>] Your gained operator privileges");
+                    save(ws);
+                    found = true;
+                }
+            });
+            if (found) {
+                console.log('[>] User ' + user + ' is now an operator');
+            } else {
+                console.log('[>] User ' + user + ' is not online');
+            }
+        } else if (d.toString().trim().startsWith("Unset-Operator ")) {
+            let user = d.toString().trim().substr(15);
+            let found = false;
+            clients.forEach(ws => {
+                if (ws.userData.username == user) {
+                    ws.userData.operator = false;
+                    ws.send("[CHAT] [>] Your operator privileges got removed");
+                    save(ws);
+                    found = true;
+                }
+            });
+            if (found) {
+                console.log('[>] User ' + user + ' is now not an operator');
+            } else {
+                console.log('[>] User ' + user + ' is not online');
+            }
+        } else if (d.toString().trim() == "Stop") {
+            clients.forEach(ws => {
+                save(ws);
+            });
+            console.log("Data is safe, Ctrl+C");
         }
     });
 
-    console.log("[>] Temorak server listening on port 80");
-    http.createServer(accept).listen(8080);
+    console.log("[>] Temorak server listening on port 8080");
+    server = http.createServer(accept);
+    listen = server.listen(8080);
 } else {
     exports.accept = accept;
 }

@@ -30,3 +30,10 @@
 - Added chat
 - Added join & leave messages
 - Switched the background color to 'skyblue'
+
+[02-07-2020] *TDR-1 PTDR-3*
+- Added chat menu, need to change the scrollbar (its ugly)
+- Added multiple server commands (Stop, Set-Operator, Unset-Operator)
+- Added player positions
+- Added player rendering
+- Added the state packet
