@@ -1,5 +1,11 @@
 let ctx = document.getElementById('content').getContext('2d');
 
+let camera = {
+    x: 0,
+    y: 0,
+    speed: 0.01
+};
+
 let mainloop = {
     executionID: null, // used to keep track of the AnimationFrame
     lastInstant: 0, // the last captured time in milliseconds
@@ -52,7 +58,15 @@ let mainloop = {
                 communication.resendState = false;
             }
         }
-    
+
+        if (communication.localUsername != null) {
+            communication.onlineUsers.forEach(user => {
+                if (user.username == communication.localUsername) {
+                    //camera.x = lerp(camera.x, user.x, camera.speed);
+                    //camera.y = lerp(camera.y, user.y, camera.speed);
+                }
+            });
+        }
 
         //keyboard.reset();
         mainloop.tps++;
@@ -64,16 +78,32 @@ let mainloop = {
 
         if (communication.socket.readyState == 1) { // RENDER THE GAME
             communication.onlineUsers.forEach(user => {
-                let x = dimensions.width / 2 + user.x;
-                let y = dimensions.height / 2 + user.y;
+                let x = (dimensions.width / 2 + user.x) - camera.x;
+                let y = (dimensions.height / 2 + user.y) - camera.y;
+                let dir = user.dir;
 
-                if (user.username == communication.localUsername) {
-                    ctx.fillStyle = "green";
-                } else {
-                    ctx.fillStyle = "red";
-                }
-
+                ctx.fillStyle = "red";
                 ctx.fillRect(x - 10, y - 10, 20, 20);
+
+                if (dir) {
+                    ctx.fillStyle = "green";
+                    switch(dir.charAt(0)) {
+                        case('l'):
+                            ctx.fillRect(x - 8, y - 8, 4, 16);
+                            break;
+                        case('r'):
+                            ctx.fillRect(x + 4, y - 8, 4, 16);
+                            break;
+                    }
+                    switch(dir.charAt(1)) {
+                        case('u'):
+                            ctx.fillRect(x - 8, y - 8, 16, 4);
+                            break;
+                        case('d'):
+                            ctx.fillRect(x - 8, y + 4, 16, 4);
+                            break;
+                    }
+                }
             });
         }
 

@@ -94,3 +94,13 @@
     from {top:-300px; opacity:0}
     to {top:0; opacity:1}
 }
+
+#chat-div{
+    height: 108px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: gray transparent;
+}

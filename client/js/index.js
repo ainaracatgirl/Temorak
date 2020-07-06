@@ -29,8 +29,23 @@ String.prototype.contains = function(search) {
     return this.indexOf(search) != -1;
 };
 
+/**
+ * Linear interpolation algorithm
+ * 
+ * @param {Number} a 
+ * @param {Number} b 
+ * @param {Number} k 
+ */
+function lerp(a, b, k) {
+    return (a * (1.0 - k)) + (b * k);
+}
+
 function replaceWithFormatting(element) {
     element.innerHTML = element.innerHTML.replace('&lt;b&gt;', '<b>').replace('&lt;/b&gt;', '</b>');
+}
+
+function formatColors(txt) {
+    return txt.replaceAll("<", "lt;").replaceAll(">", "gt;").replaceAll("§a", "<span style=\"color: green;\">").replaceAll("§b", "<span style=\"color: aqua;\">").replaceAll("§c", "<span style=\"color: red;\">").replaceAll("§d", "<span style=\"color: purple;\">").replaceAll("§e", "<span style=\"color: yellow;\">").replaceAll("§f", "<span style=\"color: white;\">");
 }
 
 { // MODALS
@@ -51,6 +66,27 @@ function replaceWithFormatting(element) {
     }
 }
 
+document.getElementById('modalInputUsername').onkeypress = function(e) {
+    if (e.key == "Enter") {
+        communication.usernameInput();
+    }
+};
+document.getElementById('modalInputPassword0').onkeypress = function(e) {
+    if (e.key == "Enter") {
+        communication.passwordInput();
+    }
+};
+document.getElementById('modalInputPassword1').onkeypress = function(e) {
+    if (e.key == "Enter") {
+        document.getElementById('modalInputPassword2').select();
+    }
+};
+document.getElementById('modalInputPassword2').onkeypress = function(e) {
+    if (e.key == "Enter") {
+        communication.createPasswordInput();
+    }
+};
+
 let communication = {
     TDR: "TDR-1 PTDR-3",
     onlineUsers: [],
@@ -59,6 +95,7 @@ let communication = {
     socket: null,
     lastHost: null,
     lastPort: null,
+    ignoreServerVersion: false,
     connect: function(host, port=80) {
         this.reset();
 
@@ -128,7 +165,7 @@ let communication = {
 
         for (let i = 1; i < split.length; i++) {
             if (split[i].trim() != "") {
-                players.push({username: split[i], x: 0, y: 0});
+                players.push({username: split[i], x: 0, y: 0, dir: '-d'});
             }
         }
 
@@ -155,7 +192,7 @@ let communication = {
     },
     onmessage: function(e) {
         if (e.data.startsWith('[VERSION] ')) {
-            if (e.data.substr(10) == communication.TDR) {
+            if (e.data.substr(10) == communication.TDR || communication.ignoreServerVersion) {
                 communication.reset();
                 modal('modalInputUser').show();
             } else {
@@ -163,14 +200,16 @@ let communication = {
             }
         } else if (e.data.startsWith('[AUTH] CREATE')) {
             document.getElementById('modalInputCreate').hidden = false;
+            document.getElementById('modalInputPassword1').select();
         } else if (e.data.startsWith('[AUTH] VALIDATE')) {
             document.getElementById('modalInputPassword').hidden = false;
+            document.getElementById('modalInputPassword0').select();
         } else if (e.data.startsWith('[AUTH-OK]')) {
             communication.onlineUsers = communication.playersFromAuth(e.data);
         } else if (e.data.startsWith('[USER-JOINED] ')) {
             if (!communication.hasUsername(e.data.split(' ')[1])) {
                 this.resendState = true;
-                communication.onlineUsers.push({username: e.data.split(' ')[1], x: 0, y: 0});
+                communication.onlineUsers.push({username: e.data.split(' ')[1], x: 0, y: 0, dir: '-d'});
             }
         } else if (e.data.startsWith('[USER-LEFT] ')) {
             communication.removeUser(e.data.split(' ')[1]);
@@ -178,15 +217,20 @@ let communication = {
             let name = e.data.split(' ')[1];
             let x = parseFloat(e.data.split(' ')[2]);
             let y = parseFloat(e.data.split(' ')[3]);
+            let dir = "-d";
+            try {
+                dir = e.data.split(' ')[4];
+            } catch (e) {};
 
             communication.onlineUsers.forEach(user => {
                 if (user.username == name) {
                     user.x = x;
                     user.y = y;
+                    user.dir = dir;
                 }
             });
         } else if (e.data.startsWith('[CHAT] ')) {
-            document.getElementById('chat-div').innerText += e.data.substr(7) + "\r\n";
+            document.getElementById('chat-div').innerHTML += formatColors(e.data.substr(7)) + "<br>"; // Section Symbol --> §§§§§§
             document.getElementById('chat-div').scrollTop = document.getElementById('chat-div').scrollHeight;
         } else {
             console.log(e);
@@ -206,9 +250,10 @@ let communication = {
             if (e.reason && e.reason.trim() != "") {
                 document.getElementById('modalDisconnectedMessage').innerText = e.reason;
                 replaceWithFormatting(document.getElementById('modalDisconnectedMessage'));
+            } else {
+                document.getElementById('modalDisconnectedMessage').innerText = "Unknown reason";
             }
             modal('modalDisconnected').show();
-            console.log(e);
         }
     }
 };
@@ -237,6 +282,10 @@ function parseQuery(queryString) {
 if (location.search != "") {
     let search = parseQuery(location.search);
 
+    if (search.ignoreserverversion) {
+        communication.ignoreServerVersion = true;
+    }
+
     if (search.ip && search.port) {
         communication.connect(search.ip, search.port);
     }
@@ -245,7 +294,7 @@ if (location.search != "") {
 document.addEventListener('readystatechange', function(event) {
     document.getElementById('chat-message-div').onkeydown = function(e) {
         if (e.key == "Enter") {
-            let message = document.getElementById('chat-message-div').innerText.replaceAll('\n', '').replaceAll('\r', '');
+            let message = document.getElementById('chat-message-div').innerText.replaceAll('\n', '').replaceAll('\r', '').replaceAll('§', '');
             
             setTimeout(function() {
                 document.getElementById('chat-message-div').innerText = "";
