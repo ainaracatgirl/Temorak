@@ -95,7 +95,7 @@
     to {top:0; opacity:1}
 }
 
-#chat-div{
+#chat-div {
     height: 108px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -103,4 +103,14 @@
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: gray transparent;
+}
+
+#chat-message-div {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    background-color: rgba(65, 65, 65, 0.1);
+    height: 20px;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
 }

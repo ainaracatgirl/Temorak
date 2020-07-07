@@ -39,7 +39,7 @@ let mainloop = {
             x: 0,
             y: 0
         };
-        if (communication.socket.readyState == 1) { // RUN THE GAME
+        if (communication.socket && communication.socket.readyState == 1) { // RUN THE GAME
             if (keyboard.keyDown('a')) {
                 state.x -= 1;
             }
@@ -76,7 +76,15 @@ let mainloop = {
         ctx.fillStyle = "skyblue";
         ctx.fillRect(0, 0, dimensions.width, dimensions.height);
 
-        if (communication.socket.readyState == 1) { // RENDER THE GAME
+        if (communication.socket && communication.socket.readyState == 1) { // RENDER THE GAME
+            if (world && world.tiles && world.tiles.length > 0) {
+                world.tiles.forEach(tile => {
+                    let x = (dimensions.width / 2 + tile.x * dimensions.tileSize) - camera.x;
+                    let y = (dimensions.height / 2 + tile.y * dimensions.tileSize) - camera.y;
+                    ctx.drawImage(textures[tile.texture], x, y);
+                });
+            }
+
             communication.onlineUsers.forEach(user => {
                 let x = (dimensions.width / 2 + user.x) - camera.x;
                 let y = (dimensions.height / 2 + user.y) - camera.y;

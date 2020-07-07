@@ -17,7 +17,7 @@
     
     <div class="floating floating-left floating-y32 size-y128" style="margin-left: 4px; background-color: rgba(65, 65, 65, 0.5); color: rgba(255, 255, 255, 0.75);">
         <div id="chat-div"></div>
-        <div id="chat-message-div" contenteditable="true" style="margin-bottom: 0px; padding-bottom: 0px; background-color: rgba(65, 65, 65, 0.1); height: 20px; overflow-y: hidden; scroll-behavior: smooth;"></div>
+        <div id="chat-message-div" contenteditable="true"></div>
     </div>
     
     <canvas id="content" width="0" height="0" class="floating-fixed">
@@ -26,6 +26,9 @@
 
     <div>
         <img type="texture" name="grass" src="textures/grass.png">
+        <img type="texture" name="dirt" src="textures/dirt.png">
+        <img type="texture" name="gravel" src="textures/gravel.png">
+        <img type="texture" name="sand" src="textures/sand.png">
     </div>
 
     <div id="modalInputUser" class="modal">
@@ -54,8 +57,6 @@
             <button onclick="modal('modalDisconnected').hide(); communication.reconnect();">Ok</button>
         </div>
     </div>
-
-    <resource type="json" name="map" src="txt/map.json"></resource>
 
     <dynsrc src="js/gamepad.js"></dynsrc>
     <dynsrc src="js/keyboard.js"></dynsrc>

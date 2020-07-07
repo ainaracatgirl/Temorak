@@ -1,12 +1,23 @@
+{
+    let world = JSON.parse(fs.readFileSync("worlds/world.json") + "");
+    if (world.version != "TDR-1") {
+        console.error("World version incompatible, please, use the updator tool");
+        world = {
+            version: "INVALID"
+        };
+    }
+}
+
 events = {
     onVersionRequest: function() {
-        return "TDR-1 PTDR-3";
+        return "TDR-1 PTDR-4";
     },
     onPlayerJoined: function(ws) {
         ws.send("[AUTH-OK] " + playerNames());
         sendAll("[USER-JOINED] " + ws.userData.username);
         sendAll("[CHAT] §e" + ws.userData.username + " joined!");
         sendAll("[STATE] " + ws.userData.username + " " + ws.userData.x + " " + ws.userData.y);
+        sendAll("[WORLD] " + JSON.stringify(world));
     },
     onPlayerLeft: function(ws) {
         sendAll("[USER-LEFT] " + ws.userData.username);
@@ -24,7 +35,9 @@ events = {
                 }
             });
         } else {
-            sendAll("[CHAT] " + ws.userData.username + ": " + message);
+            if (!message.trim().startsWith("/")) {
+                sendAll("[CHAT] " + ws.userData.username + ": " + message);
+            }
         }
     },
     onPlayerState: function(ws, message) {

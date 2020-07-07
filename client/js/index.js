@@ -40,30 +40,54 @@ function lerp(a, b, k) {
     return (a * (1.0 - k)) + (b * k);
 }
 
+/**
+ * Formats innerText to validate formatting tags
+ * 
+ * @param {HTMLElement} element 
+ */
 function replaceWithFormatting(element) {
     element.innerHTML = element.innerHTML.replace('&lt;b&gt;', '<b>').replace('&lt;/b&gt;', '</b>');
 }
 
+/**
+ * Transforms a text (txt) into a safe HTML (innerHTML), it also parses some color codes
+ * 
+ * @param {String} txt 
+ */
 function formatColors(txt) {
     return txt.replaceAll("<", "lt;").replaceAll(">", "gt;").replaceAll("§a", "<span style=\"color: green;\">").replaceAll("§b", "<span style=\"color: aqua;\">").replaceAll("§c", "<span style=\"color: red;\">").replaceAll("§d", "<span style=\"color: purple;\">").replaceAll("§e", "<span style=\"color: yellow;\">").replaceAll("§f", "<span style=\"color: white;\">");
 }
 
-{ // MODALS
-    function modal(id) {
-        let struct = {
-            dom: document.getElementById(id),
-            show: function() {
-                this.dom.style.display = "block";
-            },
-            hide: function() {
-                this.dom.style.display = "none";
-            },
-            setButton: function(id) {
-                document.getElementById(id).onclick = this.show;
-            }
-        };
-        return struct;
-    }
+/**
+ * Creates a "modal" object for the modal div with it's id being the one specified
+ * 
+ * @param {String} id 
+ */
+function modal(id) {
+    let struct = {
+        dom: document.getElementById(id),
+        /**
+         * Shows the modal
+         */
+        show: function() {
+            this.dom.style.display = "block";
+        },
+        /**
+         * Hides the modal
+         */
+        hide: function() {
+            this.dom.style.display = "none";
+        },
+        /**
+         * Sets the button (id) to show the modal
+         * 
+         * @param {String} id 
+         */
+        setButton: function(id) {
+            document.getElementById(id).onclick = this.show;
+        }
+    };
+    return struct;
 }
 
 document.getElementById('modalInputUsername').onkeypress = function(e) {
@@ -87,8 +111,16 @@ document.getElementById('modalInputPassword2').onkeypress = function(e) {
     }
 };
 
+/**
+ * The current world struct, received from server
+ */
+let world = null;
+
+/**
+ * Communication struct
+ */
 let communication = {
-    TDR: "TDR-1 PTDR-3",
+    TDR: "TDR-1 PTDR-4",
     onlineUsers: [],
     localUsername: null,
     resendState: false,
@@ -192,11 +224,11 @@ let communication = {
     },
     onmessage: function(e) {
         if (e.data.startsWith('[VERSION] ')) {
-            if (e.data.substr(10) == communication.TDR || communication.ignoreServerVersion) {
+            if (e.data.substr(10) == communication.TDR || communication.ignoreServerVersion || e.data.substr(10) == "") {
                 communication.reset();
                 modal('modalInputUser').show();
             } else {
-                this.close(3000, "TDR or PTDR not matching");
+                this.close(3000, "Incorrect server/client version\r\n\r\nTDR or PTDR not matching");
             }
         } else if (e.data.startsWith('[AUTH] CREATE')) {
             document.getElementById('modalInputCreate').hidden = false;
@@ -232,6 +264,8 @@ let communication = {
         } else if (e.data.startsWith('[CHAT] ')) {
             document.getElementById('chat-div').innerHTML += formatColors(e.data.substr(7)) + "<br>"; // Section Symbol --> §§§§§§
             document.getElementById('chat-div').scrollTop = document.getElementById('chat-div').scrollHeight;
+        } else if (e.data.startsWith('[WORLD] ')) {
+            world = JSON.parse(e.data.substr(8));
         } else {
             console.log(e);
         }

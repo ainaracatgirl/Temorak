@@ -44,9 +44,25 @@
 - Extended the state packet, still compatible, sends direction
 - Added direction lines for players
 - Found disconnect modal bug (when no error message, last one was used), fixed
-- Added kick command (Server: Kick -player- Client: /Kick -player-)
+- Added kick command
 - Added "Uptime" command, showing the time the server has been up
 - Added "?ignoreserverversion=1"
 
 [05-07-2020] *TDR-1 PTDR-3*
+- Changed scrollbars to the chat system, no longer ugly
 - Updated all the server system, now using events
+
+[06-07-2020] *TDR-1 PTDR-3*
+- Solved chat scrollbar bug
+- Added failsafe conditions
+- When a chat message starts with "/", even if not a valid command, is now not send to anyone
+- Removed client "txt" folder
+- Created the dirt, sand & gravel textures
+
+[07-07-2020] *TDR-1 PTDR-4*
+- Defined the world format (see World.md)
+- Created the world packet
+- Created a world updater script for newer versions
+- Added tile rendering to the client
+- *Questioned myself, should I add an automatic world generation script?*
+- *Questioned myself, should I add (secure) PHOSKEL scripting so the server & client run custom code?*
