@@ -1,10 +1,10 @@
 // So I can load [text, json] resources
 
-function getResource(name) {
+function getResource(name) { // returns a resource
     return RSLOADER.rs[name];
 }
 
-function r3qu3stSync(path, mode='GET') {
+function r3qu3stSync(path, mode='GET') { // Request synchronously (deprecated), so I don't have to use P R O M I S E S or A S Y N C functions
     var request = new XMLHttpRequest();
     request.open(mode, path, false);
     request.send(null);
@@ -12,6 +12,7 @@ function r3qu3stSync(path, mode='GET') {
     return request.response;
 }
 
+// Just loads everything when the file loads
 let RSLOADER = {
     resources: [],
     rs: [],

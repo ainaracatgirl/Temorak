@@ -1,5 +1,7 @@
+// TEMORAK Copyright (c) 2020 JanCraft888
 // Sooooo... this is the main index.js file, thanks for looking at my messy code. -Jan
 
+// Set up fancy logging methods
 console._log = console.log;
 console._error = console.error;
 console._warn = console.warn;
@@ -12,6 +14,8 @@ console.error = function(params) {
 console.warn = function(params) {
     console._warn("[WARN]", params);
 };
+
+// Prototype modifications
 Array.prototype.remove = function() {
     var what, a = arguments, L = a.length, ax;
     while (L && this.length) {
@@ -90,6 +94,7 @@ function modal(id) {
     return struct;
 }
 
+// Add "enter" as a way of pressing the buttons, also autoselect fields
 document.getElementById('modalInputUsername').onkeypress = function(e) {
     if (e.key == "Enter") {
         communication.usernameInput();
@@ -120,14 +125,28 @@ let world = null;
  * Communication struct
  */
 let communication = {
+    // Terminal development report, version control
     TDR: "TDR-1 PTDR-4",
+    // Online users, sent by server
     onlineUsers: [],
+    // The username the local user has selected
     localUsername: null,
+    // If the client should sent its state
     resendState: false,
+    // The WebSocket object
     socket: null,
+    // The last connected host, used by reconnect
     lastHost: null,
+    // The last connected port, used by reconnect
     lastPort: null,
+    // If the client should ignore the server incompatibility
     ignoreServerVersion: false,
+    /**
+     * Connects to a server
+     * 
+     * @param {String} host 
+     * @param {Number} port 
+     */
     connect: function(host, port=80) {
         this.reset();
 
@@ -139,6 +158,9 @@ let communication = {
         this.lastHost = host;
         this.lastPort = port;
     },
+    /**
+     * Resets all the fields used on the communication
+     */
     reset: function() {
         this.localUsername = null;
         document.getElementById('modalInputUsername').value = "";
@@ -150,9 +172,15 @@ let communication = {
         document.getElementById('modalInputCreate').hidden = true;
         document.getElementById('modalInputPassword').hidden = true;
     },
+    /**
+     * Reconnects to the last connected server
+     */
     reconnect: function() {
         this.connect(this.lastHost, this.lastPort);
     },
+    /**
+     * Called on sending username
+     */
     usernameInput: function() {
         let username = document.getElementById('modalInputUsername').value.trim();
         if (username == "") {
@@ -164,6 +192,9 @@ let communication = {
             this.socket.send("[USER-SET] " + username);
         }
     },
+    /**
+     * Called on sending password
+     */
     passwordInput: function() {
         let pass = document.getElementById('modalInputPassword0').value;
         if (pass.trim() == "") {
@@ -174,6 +205,11 @@ let communication = {
             modal('modalInputUser').hide();
         }
     },
+    /**
+     * Removes a user from onlineUsers
+     * 
+     * @param {String} username 
+     */
     removeUser: function(username) {
         for (let i = 0; i < communication.onlineUsers.length; i++) {
             if (communication.onlineUsers[i].username == username) {
@@ -182,6 +218,11 @@ let communication = {
             }
         }
     },
+    /**
+     * Check if a user is currently online
+     * 
+     * @param {String} username 
+     */
     hasUsername: function(username) {
         for (let i = 0; i < communication.onlineUsers.length; i++) {
             if (communication.onlineUsers[i].username == username) {
@@ -191,6 +232,11 @@ let communication = {
 
         return false;
     },
+    /**
+     * Parses an authentication message to get onlinePlayers
+     * 
+     * @param {String} message 
+     */
     playersFromAuth: function(message) {
         let split = message.split(' ');
         let players = [];
@@ -203,6 +249,9 @@ let communication = {
 
         return players;
     },
+    /**
+     * Called on creating a password
+     */
     createPasswordInput: function() {
         let pass1 = document.getElementById('modalInputPassword1').value;
         let pass2 = document.getElementById('modalInputPassword2').value;
@@ -220,8 +269,18 @@ let communication = {
             }
         }
     },
+    /**
+     * Called when the WebSocket connects, tbh I don't think I will use it.
+     * 
+     * @param {Event} e 
+     */
     oninit: function(e) {
     },
+    /**
+     * Called when a message gets received from the WebSocket
+     * 
+     * @param {Event} e 
+     */
     onmessage: function(e) {
         if (e.data.startsWith('[VERSION] ')) {
             if (e.data.substr(10) == communication.TDR || communication.ignoreServerVersion || e.data.substr(10) == "") {
@@ -270,9 +329,19 @@ let communication = {
             console.log(e);
         }
     },
+    /**
+     * Called when there's an error with the WebSocket
+     * 
+     * @param {Event} e 
+     */
     onerror: function(e) {
         console.error(e);
     },
+    /**
+     * Called when the connection between the client and the server gets closed
+     * 
+     * @param {Event} e 
+     */
     onclose: function(e) {
         document.getElementById('chat-div').innerText = "";
         if (e.code == 3001) {
@@ -292,6 +361,7 @@ let communication = {
     }
 };
 
+// All the textures get parsed and saved here
 let textures = {};
 {
     let imgs = document.getElementsByTagName('img');
@@ -303,6 +373,11 @@ let textures = {};
     }
 }
 
+/**
+ * Parses the queryString from the locationbar into a dictionary
+ * 
+ * @param {String} queryString 
+ */
 function parseQuery(queryString) {
     var query = {};
     var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
@@ -313,6 +388,7 @@ function parseQuery(queryString) {
     return query;
 }
 
+// Parse & actuate acordingly to the queryString
 if (location.search != "") {
     let search = parseQuery(location.search);
 
@@ -325,24 +401,27 @@ if (location.search != "") {
     }
 }
 
-document.addEventListener('readystatechange', function(event) {
-    document.getElementById('chat-message-div').onkeydown = function(e) {
-        if (e.key == "Enter") {
-            let message = document.getElementById('chat-message-div').innerText.replaceAll('\n', '').replaceAll('\r', '').replaceAll('§', '');
-            
-            setTimeout(function() {
-                document.getElementById('chat-message-div').innerText = "";
-            }, 2);
+// To be able to chat
+document.getElementById('chat-message-div').onkeydown = function(e) {
+    if (e.key == "Enter") {
+        let message = document.getElementById('chat-message-div').innerText.replaceAll('\n', '').replaceAll('\r', '').replaceAll('§', '');
+        
+        setTimeout(function() {
+            document.getElementById('chat-message-div').innerText = "";
+        }, 2);
 
-            if (communication.socket.readyState == 1 && message.trim() != "") {
-                communication.socket.send("[CHAT] " + message);
-            }
+        if (communication.socket.readyState == 1 && message.trim() != "") {
+            communication.socket.send("[CHAT] " + message);
         }
-    };
+    }
+};
 
-    index.startGame();
+// When the page gets loaded
+document.addEventListener('readystatechange', function(event) {
+    index.startGame(); // Start the game
 }, false);
 
+// The index struct
 let index = {
     startGame: function() {
         console.log("Game started!");

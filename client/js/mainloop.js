@@ -1,9 +1,12 @@
-let ctx = document.getElementById('content').getContext('2d');
+// TEMORAK Copyright (c) 2020 JanCraft888
 
+let ctx = document.getElementById('content').getContext('2d'); // The canvas context
+
+// The camera object
 let camera = {
     x: 0,
     y: 0,
-    speed: 0.01
+    speed: 0.005
 };
 
 let mainloop = {
@@ -53,17 +56,17 @@ let mainloop = {
                 state.y += 1;
             }
 
-            if ((state.x != 0 || state.y != 0) || communication.resendState) {
+            if ((state.x != 0 || state.y != 0) || communication.resendState) { // Sending the state
                 communication.socket.send("[STATE] " + state.x + " " + state.y);
                 communication.resendState = false;
             }
         }
 
-        if (communication.localUsername != null) {
+        if (communication.localUsername != null) { // Camera lerping
             communication.onlineUsers.forEach(user => {
                 if (user.username == communication.localUsername) {
-                    //camera.x = lerp(camera.x, user.x, camera.speed);
-                    //camera.y = lerp(camera.y, user.y, camera.speed);
+                    camera.x = lerp(camera.x, user.x, camera.speed);
+                    camera.y = lerp(camera.y, user.y, camera.speed);
                 }
             });
         }
@@ -77,7 +80,7 @@ let mainloop = {
         ctx.fillRect(0, 0, dimensions.width, dimensions.height);
 
         if (communication.socket && communication.socket.readyState == 1) { // RENDER THE GAME
-            if (world && world.tiles && world.tiles.length > 0) {
+            if (world && world.tiles && world.tiles.length > 0) { // render each tile
                 world.tiles.forEach(tile => {
                     let x = (dimensions.width / 2 + tile.x * dimensions.tileSize) - camera.x;
                     let y = (dimensions.height / 2 + tile.y * dimensions.tileSize) - camera.y;
@@ -85,7 +88,7 @@ let mainloop = {
                 });
             }
 
-            communication.onlineUsers.forEach(user => {
+            communication.onlineUsers.forEach(user => { // render each player
                 let x = (dimensions.width / 2 + user.x) - camera.x;
                 let y = (dimensions.height / 2 + user.y) - camera.y;
                 let dir = user.dir;

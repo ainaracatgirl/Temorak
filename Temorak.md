@@ -1,3 +1,5 @@
+**TEMORAK Copyright (c) 2020 JanCraft888**
+
 **[Disconnect-Codes]**
  - [3000] Policy/protocol violation
  - [3001] Not authorized/auto reconnect
@@ -66,3 +68,11 @@
 - Added tile rendering to the client
 - *Questioned myself, should I add an automatic world generation script?*
 - *Questioned myself, should I add (secure) PHOSKEL scripting so the server & client run custom code?*
+- *BUG-FIX* JS error "'world' not defined" in server, fixed
+- Wrote *alot* of things in README.md
+
+[08-07-2020]
+- Added comments to the client files
+- Added comments to the server "content.js" file
+- *BUG-FIX* Players could send "[STATE] -x -y" (replacing x and y with its positions) and they would instantly teleport to 0, 0. Now the position is normalized, keeping the direction, but not the speed.
+- *BUG-FIX* Accidentally, solved diagonal speed bug. You could move diagonally x2 the speed you move only on one axis. Normalization fixed the issue, now speed is *always* equal to 1.

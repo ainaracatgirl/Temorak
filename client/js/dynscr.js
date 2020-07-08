@@ -1,4 +1,4 @@
-// Just an anti-caching for JS
+// Just an anti-caching for JS, made by me
 
 let DYNSCR = {
     scripts: [],

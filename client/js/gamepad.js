@@ -1,3 +1,5 @@
+// Gamepad communication, so everyone can play
+
 let gamepad = {
     data: null,
     index: -1,

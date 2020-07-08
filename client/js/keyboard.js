@@ -1,3 +1,5 @@
+// Key listener with simple get functions
+
 let keyboard = {
     keys: new Array(),
     start: function() {

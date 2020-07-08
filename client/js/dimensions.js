@@ -2,7 +2,7 @@
 let dimensions = {
     width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
     height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
-    tileSize: 64,
+    tileSize: 32,
     start: function() {
         window.addEventListener('resize', function(event) {
             dimensions.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
