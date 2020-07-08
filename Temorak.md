@@ -28,7 +28,7 @@
 
 [24-06-2020] *TDR-1 PTDR-2*
 - Added client knowledge of the online users
-    {username: String, x: Float, y: Float, dir: String} Edit: 03-07-2020
+    {username: String, x: Float, y: Float, dir: String, height: Float} Edit: 08-07-2020
 - *BUG-FIX* When a close event ocurrs, reconnect can fail.
 - Added chat
 - Added join & leave messages
@@ -76,3 +76,7 @@
 - Added comments to the server "content.js" file
 - *BUG-FIX* Players could send "[STATE] -x -y" (replacing x and y with its positions) and they would instantly teleport to 0, 0. Now the position is normalized, keeping the direction, but not the speed.
 - *BUG-FIX* Accidentally, solved diagonal speed bug. You could move diagonally x2 the speed you move only on one axis. Normalization fixed the issue, now speed is *always* equal to 1.
+- Added player shadows and player height
+- Changed *alot* of rendering & state packet programming
+- Added server tick event (60 tps)
+- Added player jumping

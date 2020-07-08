@@ -3,6 +3,7 @@ const http = require('http');
 const ws = require('ws');
 const crypto = require('crypto');
 const wss = new ws.Server({noServer: true});
+
 const {
     performance
 } = require('perf_hooks');
@@ -274,6 +275,10 @@ if (!module.parent) {
             console.log("[>] Server has been up for " + (mins) + "min " + (secs) + "s");
         }
     });
+    console.log("[>] Temorak ticker started");
+    setInterval(function() {
+        events.onServerTick();
+    }, 16.666);
 
     console.log("[>] Temorak server listening on port 8080");
     startMillis = performance.now();

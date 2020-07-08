@@ -40,7 +40,8 @@ let mainloop = {
 
         let state = {
             x: 0,
-            y: 0
+            y: 0,
+            height: 0
         };
         if (communication.socket && communication.socket.readyState == 1) { // RUN THE GAME
             if (keyboard.keyDown('a')) {
@@ -55,9 +56,12 @@ let mainloop = {
             if (keyboard.keyDown('s')) {
                 state.y += 1;
             }
+            if (keyboard.keyDown(' ')) {
+                state.height += 1;
+            }
 
-            if ((state.x != 0 || state.y != 0) || communication.resendState) { // Sending the state
-                communication.socket.send("[STATE] " + state.x + " " + state.y);
+            if ((state.x != 0 || state.y != 0 || state.height != 0) || communication.resendState) { // Sending the state
+                communication.socket.send("[STATE] " + state.x + " " + state.y + " " + state.height);
                 communication.resendState = false;
             }
         }
@@ -91,10 +95,16 @@ let mainloop = {
             communication.onlineUsers.forEach(user => { // render each player
                 let x = (dimensions.width / 2 + user.x) - camera.x;
                 let y = (dimensions.height / 2 + user.y) - camera.y;
+                let shadowX = x + user.height;
+                let shadowY = y + user.height;
+                let size = 20 + user.height;
                 let dir = user.dir;
 
+                ctx.fillStyle = "#00000055";
+                ctx.fillRect(shadowX - size / 2, shadowY - size / 2, size, size);
+
                 ctx.fillStyle = "red";
-                ctx.fillRect(x - 10, y - 10, 20, 20);
+                ctx.fillRect(x - size / 2, y - size / 2, size, size);
 
                 if (dir) {
                     ctx.fillStyle = "green";

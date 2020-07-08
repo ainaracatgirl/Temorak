@@ -243,7 +243,7 @@ let communication = {
 
         for (let i = 1; i < split.length; i++) {
             if (split[i].trim() != "") {
-                players.push({username: split[i], x: 0, y: 0, dir: '-d'});
+                players.push({username: split[i], x: 0, y: 0, dir: '-d', height: 0});
             }
         }
 
@@ -300,7 +300,7 @@ let communication = {
         } else if (e.data.startsWith('[USER-JOINED] ')) {
             if (!communication.hasUsername(e.data.split(' ')[1])) {
                 this.resendState = true;
-                communication.onlineUsers.push({username: e.data.split(' ')[1], x: 0, y: 0, dir: '-d'});
+                communication.onlineUsers.push({username: e.data.split(' ')[1], x: 0, y: 0, dir: '-d', height: 0});
             }
         } else if (e.data.startsWith('[USER-LEFT] ')) {
             communication.removeUser(e.data.split(' ')[1]);
@@ -308,7 +308,8 @@ let communication = {
             let name = e.data.split(' ')[1];
             let x = parseFloat(e.data.split(' ')[2]);
             let y = parseFloat(e.data.split(' ')[3]);
-            let dir = "-d";
+            let height = parseFloat(e.data.split(' ')[5]);
+            let dir = "--";
             try {
                 dir = e.data.split(' ')[4];
             } catch (e) {};
@@ -317,7 +318,10 @@ let communication = {
                 if (user.username == name) {
                     user.x = x;
                     user.y = y;
-                    user.dir = dir;
+                    if (dir != "--") {
+                        user.dir = dir;
+                    }
+                    user.height = height;
                 }
             });
         } else if (e.data.startsWith('[CHAT] ')) {
