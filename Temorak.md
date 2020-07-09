@@ -71,7 +71,7 @@
 - *BUG-FIX* JS error "'world' not defined" in server, fixed
 - Wrote *alot* of things in README.md
 
-[08-07-2020]
+[08-07-2020] *TDR-1 PTDR-5*
 - Added comments to the client files
 - Added comments to the server "content.js" file
 - *BUG-FIX* Players could send "[STATE] -x -y" (replacing x and y with its positions) and they would instantly teleport to 0, 0. Now the position is normalized, keeping the direction, but not the speed.
@@ -80,3 +80,12 @@
 - Changed *alot* of rendering & state packet programming
 - Added server tick event (60 tps)
 - Added player jumping
+
+[09-07-2020] *TDR-1 PTDR-5*
+- Added .gitignore rules
+- Added tile height
+- Added player height sorting
+- Added anti edge-fall
+- Added random world generation
+- [TODO] Random world decoration
+- *BUG-FIX* Jumping breaks randomly, fixed

@@ -92,6 +92,9 @@ let mainloop = {
                 });
             }
 
+            communication.onlineUsers.sort((a, b) => {
+                return a.height - b.height;
+            });
             communication.onlineUsers.forEach(user => { // render each player
                 let x = (dimensions.width / 2 + user.x) - camera.x;
                 let y = (dimensions.height / 2 + user.y) - camera.y;
@@ -100,8 +103,10 @@ let mainloop = {
                 let size = 20 + user.height;
                 let dir = user.dir;
 
-                ctx.fillStyle = "#00000055";
-                ctx.fillRect(shadowX - size / 2, shadowY - size / 2, size, size);
+                if (user.height > 0) {
+                    ctx.fillStyle = "#00000055";
+                    ctx.fillRect(shadowX - size / 2, shadowY - size / 2, size, size);
+                }
 
                 ctx.fillStyle = "red";
                 ctx.fillRect(x - size / 2, y - size / 2, size, size);

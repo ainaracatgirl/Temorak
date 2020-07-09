@@ -126,7 +126,7 @@ let world = null;
  */
 let communication = {
     // Terminal development report, version control
-    TDR: "TDR-1 PTDR-4",
+    TDR: "TDR-1 PTDR-5",
     // Online users, sent by server
     onlineUsers: [],
     // The username the local user has selected

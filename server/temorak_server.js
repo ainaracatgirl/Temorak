@@ -191,20 +191,20 @@ if (!module.parent) {
     let listen = undefined;
 
     stdin.addListener("data", function(d) {
-        if (d.toString().trim() == 'Request-Content-Reload') {
+        if (d.toString().trim() == 'reload') {
             let CONTENT_CODE = fs.readFileSync('content.js') + '';
             eval(CONTENT_CODE);
             clients.forEach(client => {
                 client.close(3001, "Auto reconnect");
             });
-            console.log('[>] Request-Accpeted');
-        } else if (d.toString().trim().startsWith("Set-Operator ")) {
-            let user = d.toString().trim().substr(13);
+            console.log('[>] Content reloaded');
+        } else if (d.toString().trim().startsWith("op ")) {
+            let user = d.toString().trim().substr(3);
             let found = false;
             clients.forEach(ws => {
                 if (ws.userData.username == user) {
                     ws.userData.operator = true;
-                    ws.send("[CHAT] [>] Your gained operator privileges");
+                    ws.send("[CHAT] §e» §bYou gained operator privileges");
                     save(ws);
                     found = true;
                 }
@@ -214,13 +214,13 @@ if (!module.parent) {
             } else {
                 console.log('[>] User ' + user + ' is not online');
             }
-        } else if (d.toString().trim().startsWith("Unset-Operator ")) {
-            let user = d.toString().trim().substr(15);
+        } else if (d.toString().trim().startsWith("deop ")) {
+            let user = d.toString().trim().substr(5);
             let found = false;
             clients.forEach(ws => {
                 if (ws.userData.username == user) {
                     ws.userData.operator = false;
-                    ws.send("[CHAT] [>] Your operator privileges got removed");
+                    ws.send("[CHAT] §e» §bYour operator privileges got removed");
                     save(ws);
                     found = true;
                 }
@@ -230,7 +230,7 @@ if (!module.parent) {
             } else {
                 console.log('[>] User ' + user + ' is not online');
             }
-        } else if (d.toString().trim().startsWith("Kick ")) {
+        } else if (d.toString().trim().startsWith("kick ")) {
             let user = d.toString().trim().substr(5);
             let found = false;
             clients.forEach(ws => {
@@ -247,13 +247,13 @@ if (!module.parent) {
             }
         } else if (d.toString().trim().startsWith("Chat ")) {
             sendAll("[CHAT] " + d.toString().trim().substr(5).split("&").join("§"));
-        } else if (d.toString().trim() == "Stop") {
+        } else if (d.toString().trim() == "stop") {
             clients.forEach(ws => {
                 save(ws);
                 ws.close(3003, "Server closed/restarting");
             });
             console.log("[>] Data is safe, you can now Ctrl+C out");
-        } else if (d.toString().trim() == "Uptime") {
+        } else if (d.toString().trim() == "uptime") {
             let secs = ((performance.now() - startMillis) / 1000).toPrecision(2);
             let mins = (secs / 60).toPrecision(2);
             let hours = (mins / 60).toPrecision(2);
@@ -268,7 +268,7 @@ if (!module.parent) {
             } else {
                 console.log("[>] Server has been up for " + days + " days " + (hours % 60) + "h " + (mins % 60) + "min " + (secs % 60) + "s (a server restart may be required)");
             }
-        } else if (d.toString().trim() == "Uptime -raw") {
+        } else if (d.toString().trim() == "uptime -raw") {
             let secs = ((performance.now() - startMillis) / 1000).toPrecision(2);
             let mins = (secs / 60).toPrecision(2);
 
