@@ -159,6 +159,10 @@ events = { // The events the game runs
                     found = true;
                 }
             });
+        } else if (message.trim() == "/checklag"
+                || message.trim() == "/lagcheck"
+                || message.trim() == "/lag") {
+            ws.send("[LAGCHECK] " + Date.now());
         } else {
             if (!message.trim().startsWith("/")) {
                 sendAll("[CHAT] " + ws.userData.username + ": " + message);
@@ -176,7 +180,7 @@ events = { // The events the game runs
         if (ts && ts.highest < 0) {
             return;
         }
-        if (Math.abs(ws.userData.height - ts.highest) < 0.5) {
+        if (ws.userData.height - ts.highest < 0.5) {
             ws.userData.vVel += parseFloat(split[3]);
         }
         

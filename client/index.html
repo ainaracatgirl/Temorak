@@ -15,6 +15,7 @@
 </head>
 <body style="overflow: hidden; width: 100%; height: 100%; padding: 0px; margin: 0px;">
     <div id="fps-tps-counter" class="floating floating-left">TPS: 00 FPS: 00</div>
+    <div id="version" class="floating floating-right2">v0.1.10</div>
     <img id="keyboard-mouse-icon" src="img/keyboard-mouse.png" class="floating floating-right" width="64" height="64"></img>
     <img id="gamepad-icon" src="img/gamepad.png" class="floating floating-right floating-y64" width="64" height="64" hidden></img>
     
@@ -32,6 +33,21 @@
         <img type="texture" name="dirt" src="textures/dirt.png">
         <img type="texture" name="gravel" src="textures/gravel.png">
         <img type="texture" name="sand" src="textures/sand.png">
+    </div>
+
+    <div id="serverSelect" class="modal">
+        <div class="modal-content">
+            <div class="server-listed" host="localhost" port="80" name="Local (80)"></div>
+            <div class="server-listed" host="localhost" port="8080" name="Local (8080)"></div>
+            <div class="server-listed" host="temorak.bracketslab.com" port="8080" name="Official Server (8080)"></div>
+        </div>
+    </div>
+    <div id="shareServer" class="modal">
+        <div class="modal-content">
+            You can copy this link<br>
+            <span style="color: lightseagreen" id="shareServerLink" class="onclick-copy">error loading link</span><br><br>
+            <button onclick="modal('serverSelect').show(); modal('shareServer').hide();">Back</button>
+        </div>
     </div>
 
     <div id="modalInputUser" class="modal">

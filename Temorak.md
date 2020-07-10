@@ -81,7 +81,7 @@
 - Added server tick event (60 tps)
 - Added player jumping
 
-[09-07-2020] *TDR-1 PTDR-5*
+[09-07-2020] *TDR-1 PTDR-5* v0.1.9
 - Added .gitignore rules
 - Added tile height
 - Added player height sorting
@@ -89,3 +89,11 @@
 - Added random world generation
 - [TODO] Random world decoration
 - *BUG-FIX* Jumping breaks randomly, fixed
+⁻ *BUG-FIX* Actually fixed jumping
+- Added version/patch indicator (top right)
+- Now when kicked/disconnected the last data gets erased
+
+[10-07-2020] *TDR-1 PTDR-5* v0.1.10
+- *BUG-FIX* Chat ">" & "<" shows up as "gt;" & "lt;", fixed
+- Added /checklag (/lagcheck, /checklag, /lag) command, anyone can use it
+- Added server selector on /

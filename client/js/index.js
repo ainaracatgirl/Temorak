@@ -59,7 +59,7 @@ function replaceWithFormatting(element) {
  * @param {String} txt 
  */
 function formatColors(txt) {
-    return txt.replaceAll("<", "lt;").replaceAll(">", "gt;").replaceAll("§a", "<span style=\"color: green;\">").replaceAll("§b", "<span style=\"color: aqua;\">").replaceAll("§c", "<span style=\"color: red;\">").replaceAll("§d", "<span style=\"color: purple;\">").replaceAll("§e", "<span style=\"color: yellow;\">").replaceAll("§f", "<span style=\"color: white;\">");
+    return txt.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("§a", "<span style=\"color: green;\">").replaceAll("§b", "<span style=\"color: aqua;\">").replaceAll("§c", "<span style=\"color: red;\">").replaceAll("§d", "<span style=\"color: purple;\">").replaceAll("§e", "<span style=\"color: yellow;\">").replaceAll("§f", "<span style=\"color: white;\">");
 }
 
 /**
@@ -162,6 +162,8 @@ let communication = {
      * Resets all the fields used on the communication
      */
     reset: function() {
+        world = undefined;
+        this.onlineUsers = [];
         this.localUsername = null;
         document.getElementById('modalInputUsername').value = "";
         document.getElementById('modalInputUsername').disabled = false;
@@ -297,6 +299,25 @@ let communication = {
             document.getElementById('modalInputPassword0').select();
         } else if (e.data.startsWith('[AUTH-OK]')) {
             communication.onlineUsers = communication.playersFromAuth(e.data);
+        } else if (e.data.startsWith('[LAGCHECK] ')) {
+            let time = parseInt(e.data.substr(11));
+            let now = Date.now();
+            let ping = now - time;
+            let color = 'green';
+            if (ping > 20) {
+                color = "yellowgreen";
+            }
+            if (ping > 50) {
+                color = "yellow";
+            }
+            if (ping > 80) {
+                color = "orange";
+            }
+            if (ping > 120) {
+                color = "red";
+            }
+            document.getElementById('chat-div').innerHTML += '<span style="color: lightgray;">Your current ping is </span><span style="color: ' + color + ';">' + ping + 'ms</span><br>';
+            document.getElementById('chat-div').scrollTop = document.getElementById('chat-div').scrollHeight;
         } else if (e.data.startsWith('[USER-JOINED] ')) {
             if (!communication.hasUsername(e.data.split(' ')[1])) {
                 this.resendState = true;
@@ -392,6 +413,24 @@ function parseQuery(queryString) {
     return query;
 }
 
+function shareServer(host, port) {
+    document.getElementById('shareServerLink').innerText = location.origin + location.pathname + "?ip=" + host + "&port=" + port;
+    modal('shareServer').show();
+}
+
+let onclick_copies = document.getElementsByClassName('onclick-copy');
+for (let i = 0; i < onclick_copies.length; i++) {
+    onclick_copies[i].onclick = function() {
+        const el = document.createElement("textarea");
+        el.value = onclick_copies[i].innerText;
+        document.body.append(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        onclick_copies[i].innerText = "Copied!";
+    };
+}
+
 // Parse & actuate acordingly to the queryString
 if (location.search != "") {
     let search = parseQuery(location.search);
@@ -403,6 +442,39 @@ if (location.search != "") {
     if (search.ip && search.port) {
         communication.connect(search.ip, search.port);
     }
+} else {
+    let servers = document.getElementsByClassName("server-listed");
+    for (let i = 0; i < servers.length; i++) {
+        let server = servers[i];
+        let html = "";
+
+        html += server.attributes.name.value;
+        html += "<span style=\"color: gold;\">  pinging...</span><br>";
+        html += "<br><hr><br>";
+
+        server.innerHTML = html;
+        html = "";
+
+        let ws = new WebSocket("ws://" + server.attributes.host.value + ":" + server.attributes.port.value);
+        ws.onopen = function() {
+            html += server.attributes.name.value;
+            html += "<span style=\"color: green;\">  Up</span><br>";
+            html += '<button onclick="communication.connect(\'' + server.attributes.host.value + '\', ' + server.attributes.port.value + '); modal(\'serverSelect\').hide();">Join</button>  ';
+            html += '<button onclick="shareServer(\'' + server.attributes.host.value + '\', ' + server.attributes.port.value + '); modal(\'serverSelect\').hide();">Share</button>';
+            html += "<br><hr><br>";
+            server.innerHTML = html;
+            ws.close();
+        };
+        ws.onerror = function() {
+            server.id = "serverlist_remove" + i;
+            html += server.attributes.name.value;
+            html += "<span style=\"color: red;\">  Down</span><br>";
+            html += '<button onclick="document.getElementById(\'' + server.id + '\').remove();">Remove</button>';
+            html += "<br><hr><br>";
+            server.innerHTML = html;
+        };
+    }
+    modal('serverSelect').show();
 }
 
 // To be able to chat

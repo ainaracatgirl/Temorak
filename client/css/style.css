@@ -51,6 +51,11 @@
     width: 512px;
 }
 
+.floating-right2 {
+    right: 0px;
+    padding-right: 4px;
+}
+
 .floating-right {
     top: 10px;
     right: 0px;
