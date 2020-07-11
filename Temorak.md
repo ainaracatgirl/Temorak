@@ -93,7 +93,13 @@
 - Added version/patch indicator (top right)
 - Now when kicked/disconnected the last data gets erased
 
-[10-07-2020] *TDR-1 PTDR-5* v0.1.10
+[10-07-2020] *TDR-1 PTDR-5* v0.1.11
 - *BUG-FIX* Chat ">" & "<" shows up as "gt;" & "lt;", fixed
 - Added /checklag (/lagcheck, /checklag, /lag) command, anyone can use it
 - Added server selector on /
+- Added server port selection
+- Added "show dev servers" button
+- *BUG-FIX* Render bug fixed
+
+[11-07-2020] *TDR-1 PTDR-5* v0.1.12
+- Added scaling to the player direction lines

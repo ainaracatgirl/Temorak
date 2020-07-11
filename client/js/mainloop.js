@@ -88,7 +88,7 @@ let mainloop = {
                 world.tiles.forEach(tile => {
                     let x = (dimensions.width / 2 + tile.x * dimensions.tileSize) - camera.x;
                     let y = (dimensions.height / 2 + tile.y * dimensions.tileSize) - camera.y;
-                    ctx.drawImage(textures[tile.texture], x, y);
+                    ctx.drawImage(textures[tile.texture], x.toFixed(0), y.toFixed(0));
                 });
             }
 
@@ -111,22 +111,26 @@ let mainloop = {
                 ctx.fillStyle = "red";
                 ctx.fillRect(x - size / 2, y - size / 2, size, size);
 
+                const MARGIN_V = 2;
+                const MARGIN_H = 1;
+                const SIZE_V = size - (MARGIN_V * 2);
+
                 if (dir) {
                     ctx.fillStyle = "green";
                     switch(dir.charAt(0)) {
                         case('l'):
-                            ctx.fillRect(x - 8, y - 8, 4, 16);
+                            ctx.fillRect(x - SIZE_V / 2, y - SIZE_V / 2, SIZE_V / 4, SIZE_V);
                             break;
                         case('r'):
-                            ctx.fillRect(x + 4, y - 8, 4, 16);
+                            ctx.fillRect(x + SIZE_V / 4, y - SIZE_V / 2, SIZE_V / 4, SIZE_V);
                             break;
                     }
                     switch(dir.charAt(1)) {
                         case('u'):
-                            ctx.fillRect(x - 8, y - 8, 16, 4);
+                            ctx.fillRect(x - SIZE_V / 2, y - SIZE_V / 2, SIZE_V, SIZE_V / 4);
                             break;
                         case('d'):
-                            ctx.fillRect(x - 8, y + 4, 16, 4);
+                            ctx.fillRect(x - SIZE_V / 2, y + SIZE_V / 4, SIZE_V, SIZE_V / 4);
                             break;
                     }
                 }

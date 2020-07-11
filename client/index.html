@@ -15,7 +15,7 @@
 </head>
 <body style="overflow: hidden; width: 100%; height: 100%; padding: 0px; margin: 0px;">
     <div id="fps-tps-counter" class="floating floating-left">TPS: 00 FPS: 00</div>
-    <div id="version" class="floating floating-right2">v0.1.10</div>
+    <div id="version" class="floating floating-right2">v0.1.12</div>
     <img id="keyboard-mouse-icon" src="img/keyboard-mouse.png" class="floating floating-right" width="64" height="64"></img>
     <img id="gamepad-icon" src="img/gamepad.png" class="floating floating-right floating-y64" width="64" height="64" hidden></img>
     
@@ -37,9 +37,13 @@
 
     <div id="serverSelect" class="modal">
         <div class="modal-content">
-            <div class="server-listed" host="localhost" port="80" name="Local (80)"></div>
-            <div class="server-listed" host="localhost" port="8080" name="Local (8080)"></div>
-            <div class="server-listed" host="temorak.bracketslab.com" port="8080" name="Official Server (8080)"></div>
+            <input type="checkbox" name="serverSelectDev" id="serverSelectDev"> Show dev servers<br><br>
+            <div id="serverDevList" hidden>
+                <div class="server-listed" host="localhost" port="80" name="Local (80)"></div>
+                <div class="server-listed" host="localhost" port="8080" name="Local (8080)"></div>
+                <div class="server-listed" host="temorak.bracketslab.com" port="9080" name="Official (Dev) Server"></div>
+            </div>
+            <div class="server-listed" host="temorak.bracketslab.com" port="8080" name="Official Server"></div>
         </div>
     </div>
     <div id="shareServer" class="modal">

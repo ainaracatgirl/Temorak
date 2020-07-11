@@ -280,10 +280,15 @@ if (!module.parent) {
         events.onServerTick();
     }, 16.666);
 
-    console.log("[>] Temorak server listening on port 8080");
     startMillis = performance.now();
     server = http.createServer(accept);
-    listen = server.listen(8080);
+    if (process.argv.length > 2) {
+        listen = server.listen(process.argv[2]);
+        console.log("[>] Temorak server listening on port " + process.argv[2]);
+    } else {
+        listen = server.listen(8080);
+        console.log("[>] Temorak server listening on port 8080");
+    }
 } else {
     exports.accept = accept;
 }

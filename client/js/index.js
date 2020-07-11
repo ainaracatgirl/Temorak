@@ -418,6 +418,12 @@ function shareServer(host, port) {
     modal('shareServer').show();
 }
 
+let serverSelectDev = false;
+document.getElementById('serverSelectDev').oninput = function(e) {
+    serverSelectDev = !serverSelectDev;
+    document.getElementById('serverDevList').hidden = !serverSelectDev;
+};
+
 let onclick_copies = document.getElementsByClassName('onclick-copy');
 for (let i = 0; i < onclick_copies.length; i++) {
     onclick_copies[i].onclick = function() {
@@ -458,7 +464,7 @@ if (location.search != "") {
         let ws = new WebSocket("ws://" + server.attributes.host.value + ":" + server.attributes.port.value);
         ws.onopen = function() {
             html += server.attributes.name.value;
-            html += "<span style=\"color: green;\">  Up</span><br>";
+            html += "<span style=\"color: green;\">  up</span><br>";
             html += '<button onclick="communication.connect(\'' + server.attributes.host.value + '\', ' + server.attributes.port.value + '); modal(\'serverSelect\').hide();">Join</button>  ';
             html += '<button onclick="shareServer(\'' + server.attributes.host.value + '\', ' + server.attributes.port.value + '); modal(\'serverSelect\').hide();">Share</button>';
             html += "<br><hr><br>";
@@ -468,7 +474,7 @@ if (location.search != "") {
         ws.onerror = function() {
             server.id = "serverlist_remove" + i;
             html += server.attributes.name.value;
-            html += "<span style=\"color: red;\">  Down</span><br>";
+            html += "<span style=\"color: red;\">  down</span><br>";
             html += '<button onclick="document.getElementById(\'' + server.id + '\').remove();">Remove</button>';
             html += "<br><hr><br>";
             server.innerHTML = html;
