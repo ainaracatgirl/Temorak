@@ -447,8 +447,14 @@ if (location.search != "") {
 
     if (search.ip && search.port) {
         communication.connect(search.ip, search.port);
+    } else {
+        loadServers();
     }
 } else {
+    loadServers();
+}
+
+function loadServers() {
     let servers = document.getElementsByClassName("server-listed");
     for (let i = 0; i < servers.length; i++) {
         let server = servers[i];
