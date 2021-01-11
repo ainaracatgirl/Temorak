@@ -1,3 +1,5 @@
+// TEMORAK Copyright (c) 2021 jDev
+
 // Module for tracking the width & height of the window
 let dimensions = {
     width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,

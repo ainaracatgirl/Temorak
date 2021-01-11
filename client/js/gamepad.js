@@ -1,3 +1,5 @@
+// TEMORAK Copyright (c) 2021 jDev
+
 // Gamepad communication, so everyone can play
 
 let gamepad = {

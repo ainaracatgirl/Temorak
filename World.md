@@ -1,6 +1,6 @@
 **[World-File-Definition]**
 
-Worlds are JSON files which define:
+Worlds are JSON files defined as follows:
 - Version *(TDR)*
 - Tiles:
     **ID, *(String)***

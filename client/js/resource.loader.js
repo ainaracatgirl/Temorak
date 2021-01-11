@@ -1,10 +1,13 @@
-// So I can load [text, json] resources
+// TEMORAK Copyright (c) 2021 jDev
+
+// So Temorak can load [text & json] resources
 
 function getResource(name) { // returns a resource
     return RSLOADER.rs[name];
 }
 
-function r3qu3stSync(path, mode='GET') { // Request synchronously (deprecated), so I don't have to use P R O M I S E S or A S Y N C functions
+function r3qu3stSync(path, mode='GET') { // Request synchronously (deprecated), so I don't have to use PROMISES or ASYNC functions
+// (as of 2021 I would have used async/await but I'm too busy to re-code everything)
     var request = new XMLHttpRequest();
     request.open(mode, path, false);
     request.send(null);

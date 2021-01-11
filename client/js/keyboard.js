@@ -1,3 +1,5 @@
+// TEMORAK Copyright (c) 2021 jDev
+
 // Key listener with simple get functions
 
 let keyboard = {

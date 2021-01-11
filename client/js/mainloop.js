@@ -1,4 +1,4 @@
-// TEMORAK Copyright (c) 2020 JanCraft888
+// TEMORAK Copyright (c) 2021 jDev
 
 let ctx = document.getElementById('content').getContext('2d'); // The canvas context
 
@@ -40,8 +40,7 @@ let mainloop = {
 
         let state = {
             x: 0,
-            y: 0,
-            height: 0
+            y: 0
         };
         if (communication.socket && communication.socket.readyState == 1) { // RUN THE GAME
             if (keyboard.keyDown('a')) {
@@ -56,12 +55,9 @@ let mainloop = {
             if (keyboard.keyDown('s')) {
                 state.y += 1;
             }
-            if (keyboard.keyDown(' ')) {
-                state.height += 1;
-            }
 
-            if ((state.x != 0 || state.y != 0 || state.height != 0) || communication.resendState) { // Sending the state
-                communication.socket.send("[STATE] " + state.x + " " + state.y + " " + state.height);
+            if ((state.x != 0 || state.y != 0) || communication.resendState) { // Sending the state
+                communication.socket.send("[STATE] " + state.x + " " + state.y );
                 communication.resendState = false;
             }
         }
@@ -92,21 +88,11 @@ let mainloop = {
                 });
             }
 
-            communication.onlineUsers.sort((a, b) => {
-                return a.height - b.height;
-            });
             communication.onlineUsers.forEach(user => { // render each player
                 let x = (dimensions.width / 2 + user.x) - camera.x;
                 let y = (dimensions.height / 2 + user.y) - camera.y;
-                let shadowX = x + user.height;
-                let shadowY = y + user.height;
-                let size = 20 + user.height;
+                let size = 20;
                 let dir = user.dir;
-
-                if (user.height > 0) {
-                    ctx.fillStyle = "#00000055";
-                    ctx.fillRect(shadowX - size / 2, shadowY - size / 2, size, size);
-                }
 
                 ctx.fillStyle = "red";
                 ctx.fillRect(x - size / 2, y - size / 2, size, size);

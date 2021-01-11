@@ -1,4 +1,6 @@
-// Just an anti-caching for JS, made by me
+// TEMORAK Copyright (c) 2021 jDev
+
+// Just an anti-caching for JS, made by jancraft888
 
 let DYNSCR = {
     scripts: [],

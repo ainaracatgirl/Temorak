@@ -1,3 +1,5 @@
+// TEMORAK Copyright (c) 2021 jDev
+
 const fs = require('fs');
 
 function readWorld(filename) {

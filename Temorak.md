@@ -103,3 +103,6 @@
 
 [11-07-2020] *TDR-1 PTDR-5* v0.1.12
 - Added scaling to the player direction lines
+
+[11-01-2021] *TDR-1 PTDR-5* v0.1.12
+- Changed to use my new laptop & PC

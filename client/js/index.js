@@ -1,5 +1,4 @@
-// TEMORAK Copyright (c) 2020 JanCraft888
-// Sooooo... this is the main index.js file, thanks for looking at my messy code. -Jan
+// TEMORAK Copyright (c) 2021 jDev
 
 // Set up fancy logging methods
 console._log = console.log;
@@ -245,7 +244,7 @@ let communication = {
 
         for (let i = 1; i < split.length; i++) {
             if (split[i].trim() != "") {
-                players.push({username: split[i], x: 0, y: 0, dir: '-d', height: 0});
+                players.push({username: split[i], x: 0, y: 0, dir: '-d'});
             }
         }
 
@@ -321,7 +320,7 @@ let communication = {
         } else if (e.data.startsWith('[USER-JOINED] ')) {
             if (!communication.hasUsername(e.data.split(' ')[1])) {
                 this.resendState = true;
-                communication.onlineUsers.push({username: e.data.split(' ')[1], x: 0, y: 0, dir: '-d', height: 0});
+                communication.onlineUsers.push({username: e.data.split(' ')[1], x: 0, y: 0, dir: '-d'});
             }
         } else if (e.data.startsWith('[USER-LEFT] ')) {
             communication.removeUser(e.data.split(' ')[1]);
@@ -329,7 +328,6 @@ let communication = {
             let name = e.data.split(' ')[1];
             let x = parseFloat(e.data.split(' ')[2]);
             let y = parseFloat(e.data.split(' ')[3]);
-            let height = parseFloat(e.data.split(' ')[5]);
             let dir = "--";
             try {
                 dir = e.data.split(' ')[4];
@@ -342,7 +340,6 @@ let communication = {
                     if (dir != "--") {
                         user.dir = dir;
                     }
-                    user.height = height;
                 }
             });
         } else if (e.data.startsWith('[CHAT] ')) {

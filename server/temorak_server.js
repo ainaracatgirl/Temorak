@@ -1,3 +1,5 @@
+// TEMORAK Copyright (c) 2021 jDev
+
 const fs = require('fs');
 const http = require('http');
 const ws = require('ws');
