@@ -1,25 +1,11 @@
 # Temorak
-Survival game where you play alone or with friends.
+Survival and adventure game, you're a nomad ghost that's trapped in an island and you need to survive. Discover all the secrets in the TEMORAK world!
 
-Play at https://jancraft.github.io/Temorak/client/
+Play at https://jdev.com.es/Temorak/client/
 
-Public gameplay providers, known as Servers, serve a different experience, our official server (not running as of 11-01-2021) serves a full vanilla (non-modded) experience.
+### **Player Safety**
+We use the latest version of *jDev gNET* for networking, a secure peer-to-peer hosting library for JS. Please do not tell anyone in-game your password, personal details or credit card information. We will *never* ask for your passwords, as TEMORAK does not use passwords. If your username gets 'stealed', we can only advert and temp-ban the user's IP from the network.
+**Stay safe, please!**
 
-Please, when creating a server, read our EULA, you might do things you aren't allowed to do.
-
-### Temorak for Server Owners
-For you, we have a server software and will soon have a documented guide (when it's ready, we will post the link here)
-
-You can add PHOSKEL scripts to change the game experience.
-
-### Temorak for Developers
-For you, this game is fully OpenSource, so that's good for you, the server & client are not documented. I'm working on documenting every single code block.
-
-The PHOSKEL scripts sent from the server to the client can run JS, **if someone discovers a security breach, post it on GitHub Issues**.
-
-### Temorak Security
-Ok, I am currently trying to change the WebSockets to SecureWebSockets, it's not actually easy.
-
-The scripts that run in the client can run JS, I don't know if there's a security problem in that, considering that the password is always sent before the script, and the script will only run when there's a connection open. **If someone discovers a security breach, post it on GitHub Issues**.
-
-Servers hash the password, and if they don't, they have the big problem, I don't have any control in that. If you think your password is not secure, contact the server owner and not me. **DO NOT USE THE SAME PASSWORD IN THE TEMORAK SERVERS AND OTHER SOCIAL MEDIA, IT MIGHT BE COMPROMISED**.
+### **Temorak for Developers**
+For you, this game is fully Open Source but the client is not documented. We maybe document everyting in a **Modder API** in the future. Our servers run **jDev gNET** and that has it's own documentation on it's [GitHub page](https://github.com/JanCraft/jdev-gNET)

@@ -1,43 +1,20 @@
-// TEMORAK Copyright (c) 2021 jDev
-
-// Gamepad communication, so everyone can play
-
-let gamepad = {
-    data: null,
-    index: -1,
-    timestamp: 0,
-    start: function() {
-        window.addEventListener("gamepadconnected", (event) => {
-            if (gamepad.index == -1) {
-                gamepad.index = event.gamepad.index;
-                gamepad.data = { axes: event.gamepad.axes, buttons: event.gamepad.buttons };
-                console.log("Gamepad -> Accepted (" + event.gamepad.id + ")");
-            } else {
-                if(confirm("You already have a Gamepad connected, but another has connected, do you want to use the new gamepad?")) {
-                    gamepad.index = event.gamepad.index;
-                    gamepad.data = { axes: event.gamepad.axes, buttons: event.gamepad.buttons };
-                    console.log("Gamepad -> Switched to (" + event.gamepad.id + ")");
+export default {
+    init() {
+        const struct = {
+            gamepads: [],
+            poll() {
+                const gs = navigator.getGamepads();
+                for (let i = 0; i < this.gamepads.length; i++) {
+                    this.gamepads[i] = gs[this.gamepads[i].index];
                 }
             }
+        };
+        window.addEventListener("gamepadconnected", (e) => {
+            struct.gamepads.push(e.gamepad);
         });
-          
-        window.addEventListener("gamepaddisconnected", (event) => {
-            if (event.gamepad.index == gamepad.index) {
-                gamepad.data = null;
-                gamepad.index = -1;
-                console.log("Gamepad -> Disconnected");
-            }
+        window.addEventListener("gamepaddisconnected", (e) => {
+            struct.gamepads.remove(e.gamepad);
         });
-    },
-    update: function() {
-        if (gamepad.index != -1) {
-            let gpad = navigator.getGamepads()[gamepad.index];
-            if (gpad) {
-                if (gpad.timestamp != gamepad.timestamp) {
-                    gamepad.data = { axes: gpad.axes, buttons: gpad.buttons };
-                    gamepad.timestamp = gpad.timestamp;
-                }
-            }
-        }
+        return struct;
     }
 };

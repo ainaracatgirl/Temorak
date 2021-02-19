@@ -1,4 +1,4 @@
-**TEMORAK Copyright (c) 2020 JanCraft888**
+**TEMORAK Copyright (c) 2021 jDev**
 
 **[Disconnect-Codes]**
  - [3000] Policy/protocol violation
@@ -106,3 +106,16 @@
 
 [11-01-2021] *TDR-1 PTDR-5* v0.1.12
 - Changed to use my new laptop & PC
+
+[18-02-2021] *TDR-1 PTDR-5* v0.1.12
+- jDev owns TEMORAK now
+- New logo, more modern and jDev styled
+- Now all textures are 16x16 pixel art
+- Game's theme is announced: "Nomad ghosts that survive in an island"
+
+[18-02-2021] v0.1.13
+- Changed to versions only, no more TDRs
+- Rewrite for the tile system
+- New README
+- Rewrite for the gamepad engine
+- Rewrite for the input module
