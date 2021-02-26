@@ -1,5 +1,13 @@
 /* TEMORAK Copyright (c) 2021 jDev */
 
+@font-face {
+    font-family: pixel-vt323-regular;
+    src: url('VT323-Regular.ttf');
+}
+* {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
 body {
     background-color: black;
     color: white;
@@ -72,7 +80,7 @@ canvas {
 
 .size-y128 {
     height: 128px;
-    width: 512px;
+    width: 256px;
 }
 
 .floating-right2 {
@@ -133,7 +141,6 @@ canvas {
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: gray transparent;
-    background-color: rgba(65, 65, 65, 0.5);
 }
 
 #chat-message-div {

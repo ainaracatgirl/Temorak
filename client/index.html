@@ -12,17 +12,19 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body style="overflow: hidden; width: 100%; height: 100%; padding: 0px; margin: 0px;">
-    <div id="version" class="floating floating-right2">v0.1.13</div>
-    <img id="keyboard-mouse-icon" src="img/keyboard-mouse.png" class="floating floating-right icon" width="64" height="64"></img>
-    <img id="gamepad-icon" src="img/gamepad.png" class="floating floating-right floating-y64 icon" width="64" height="64" hidden></img>
+    <div id="version" class="floating floating-right2">v0.1.14</div>
+    <img id="keyboard-mouse-icon" src="img/keyboard-mouse.png" class="floating floating-right icon" width="64" height="64">
+    <img id="gamepad-icon" src="img/gamepad.png" class="floating floating-right floating-y64 icon" width="64" height="64" hidden>
     
     <div class="floating floating-left floating-y32 size-y128" style="margin-left: 4px; background-color: rgba(65, 65, 65, 0.5); color: rgba(255, 255, 255, 0.75);">
-        <div id="chat-div"></div>
+        <div id="chat-div">Welcome to TEMORAK!</div>
         <div id="chat-message-div" contenteditable="true"></div>
     </div>
     
     <canvas id="content" width="0" height="0" class="floating-fixed">
-        Oh no! Apparently your browser does not support <b>HTML5 Canvas</b>.
+        What are you even using to play this game? Please use a modern browser :D
+
+        Now seriously, this message shows up when your browser/device does not support a feature knwon as <b>HTML5 Canvas</b> which this game uses to run properly and render images to your screen.
     </canvas>
 
     <section>
@@ -32,17 +34,12 @@
         <img type="texture" name="sand" src="textures/sand.png">
 
         <img type="texture" name="player_wh" src="textures/player_wh.png">
+        <img type="texture" name="heart" src="textures/heart.png">
+        <img type="texture" name="bolt" src="textures/bolt.png">
     </section>
 
-    <div id="modalDisconnected" class="modal">
-        <div class="modal-content">
-            <p id="modalDisconnectedCode">Disconnected (????)</p>
-            <p id="modalDisconnectedMessage">Unknown reason</p>
-            <br>
-            <br>
-            <button onclick="modal('modalDisconnected').hide(); communication.reconnect();">Ok</button>
-        </div>
-    </div>
+    <!-- IE check to disable the game from trying to run and corrupt the servers -->
+    <script>function ieversion(){return navigator.userAgent.indexOf("Trident")!=-1}if(ieversion()){alert("This game DOES NOT run on ancient browsers like Internet Explorer. You have been warned, do not expect the game to even try to run.");document.scripts[1].removeNode();}</script>
 
     <script type="module" src="js/main.js"></script>
 </body>

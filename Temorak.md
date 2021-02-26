@@ -119,3 +119,12 @@
 - New README
 - Rewrite for the gamepad engine
 - Rewrite for the input module
+
+[26-02-2021] v0.1.14
+- Fixed input module bugs
+- Added smooth movement & rotation
+- Added `networking.js`
+- Added **Open Chat** key
+- Added HUD
+- Made new heart & bolt pixelart icons
+- Health & stamina systems (material objects don't matter)

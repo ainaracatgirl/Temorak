@@ -12,10 +12,10 @@ export default {
     isVisible(tile, camera, tw, th) {
         const px = (tile.x * tw - camera.x) * 4;
         const py = (tile.y * th - camera.y) * 4;
-        if (px + tw < -window.innerWidth / 2) return false;
-        if (px - tw > window.innerWidth / 2) return false;
-        if (py + th < -window.innerHeight / 2) return false;
-        if (py - th > window.innerHeight / 2) return false;
+        if (px + tw*2.5 < -window.innerWidth / 2) return false;
+        if (px - tw*2.5 > window.innerWidth / 2) return false;
+        if (py + th*3.5 < -window.innerHeight / 2) return false;
+        if (py - th*3.5 > window.innerHeight / 2) return false;
         return true;
     },
     createTile(id, x, y) {
