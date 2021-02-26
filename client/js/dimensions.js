@@ -1,18 +1,22 @@
-// Module for tracking the width & height of the window
-let dimensions = {
-    width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-    height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
-    tileSize: 64,
-    start: function() {
-        window.addEventListener('resize', function(event) {
-            dimensions.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-            dimensions.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-            
-            document.getElementById('content').width = dimensions.width;
-            document.getElementById('content').height = dimensions.height;
-        }, false);
-
-        document.getElementById('content').width = dimensions.width;
-        document.getElementById('content').height = dimensions.height;
+export default {
+    init: (canvas) => {
+        window.onresize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        window.onresize();
+    },
+    TILE_W: 16,
+    TILE_H: 16,
+    lerp(a, b, k) {
+        return (1 - k) * a + k * b;
+    },
+    serp(a, b, k) {
+        if (a < b) {
+            return Math.min(a + k, b);
+        } else if (a > b) {
+            return Math.max(a - k, b);
+        }
+        return b;
     }
-};
+}

@@ -1,62 +1,46 @@
+<!-- TEMORAK Copyright (c) 2021 jDev -->
+
 <!DOCTYPE html>
 <html lang="en">
-<!-- HEY YOU! I know y'all like to search for easter eggs or vulnerabilites but, i would really appreciate if you told me what you found. Keep it as a secret. -Jan -->
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="[insert game description]">
-    <meta name="author" content="jancraft888">
+    <meta name="description" content="Open-world survival/adventure game">
+    <meta name="author" content="jDev">
     
     <title>TEMORAK</title>
     <link rel="shortcut icon" href="img/favicon.png">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body style="overflow: hidden; width: 100%; height: 100%; padding: 0px; margin: 0px;">
-    <div id="fps-tps-counter" class="floating floating-left">TPS: 00 FPS: 00</div>
-    <img id="keyboard-mouse-icon" src="img/keyboard-mouse.png" class="floating floating-right" width="64" height="64"></img>
-    <img id="gamepad-icon" src="img/gamepad.png" class="floating floating-right floating-y64" width="64" height="64" hidden></img>
+    <div id="version" class="floating floating-right2">v0.1.14</div>
+    <img id="keyboard-mouse-icon" src="img/keyboard-mouse.png" class="floating floating-right icon" width="64" height="64">
+    <img id="gamepad-icon" src="img/gamepad.png" class="floating floating-right floating-y64 icon" width="64" height="64" hidden>
+    
+    <div class="floating floating-left floating-y32 size-y128" style="margin-left: 4px; background-color: rgba(65, 65, 65, 0.5); color: rgba(255, 255, 255, 0.75);">
+        <div id="chat-div">Welcome to TEMORAK!</div>
+        <div id="chat-message-div" contenteditable="true"></div>
+    </div>
+    
     <canvas id="content" width="0" height="0" class="floating-fixed">
-        So sorry! Apparently your browser does not support HTML5 Canvas. Maybe try Chrome? Firefox? Chromium?
+        What are you even using to play this game? Please use a modern browser :D
+
+        Now seriously, this message shows up when your browser/device does not support a feature knwon as <b>HTML5 Canvas</b> which this game uses to run properly and render images to your screen.
     </canvas>
 
-    <div>
+    <section>
         <img type="texture" name="grass" src="textures/grass.png">
-    </div>
+        <img type="texture" name="dirt" src="textures/dirt.png">
+        <img type="texture" name="gravel" src="textures/gravel.png">
+        <img type="texture" name="sand" src="textures/sand.png">
 
-    <div id="modalInputUser" class="modal">
-        <div class="modal-content">
-            <input type="username" id="modalInputUsername" placeholder="Username">
-            <button onclick="communication.usernameInput();" id="userSendBtn">Send</button>
-            <br>
-            <br>
-            <div id="modalInputPassword" hidden>
-                <input type="password" id="modalInputPassword0" placeholder="Password">
-                <button onclick="communication.passwordInput();">Send</button>
-            </div>
-            <div id="modalInputCreate" hidden>
-                <input type="password" id="modalInputPassword1" placeholder="Set a password">
-                <input type="password" id="modalInputPassword2" placeholder="Confirm password">
-                <button onclick="communication.createPasswordInput();">Send</button>
-            </div>
-        </div>
-    </div>
-    <div id="modalDisconnected" class="modal">
-        <div class="modal-content">
-            <p id="modalDisconnectedCode">Disconnected (%code%)</p>
-            <p id="modalDisconnectedMessage">Unknown reason</p>
-            <br>
-            <br>
-            <button onclick="modal('modalDisconnected').hide();">Ok</button>
-        </div>
-    </div>
+        <img type="texture" name="player_wh" src="textures/player_wh.png">
+        <img type="texture" name="heart" src="textures/heart.png">
+        <img type="texture" name="bolt" src="textures/bolt.png">
+    </section>
 
-    <resource type="json" name="map" src="txt/map.json"></resource>
+    <!-- IE check to disable the game from trying to run and corrupt the servers -->
+    <script>function ieversion(){return navigator.userAgent.indexOf("Trident")!=-1}if(ieversion()){alert("This game DOES NOT run on ancient browsers like Internet Explorer. You have been warned, do not expect the game to even try to run.");document.scripts[1].removeNode();}</script>
 
-    <dynsrc src="js/gamepad.js"></dynsrc>
-    <dynsrc src="js/keyboard.js"></dynsrc>
-    <dynsrc src="js/dimensions.js"></dynsrc>
-    <dynsrc src="js/mainloop.js"></dynsrc>
-    <dynsrc src="js/index.js"></dynsrc>
-    <script src="js/resource.loader.js"></script>
-    <script src="js/dynscr.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
