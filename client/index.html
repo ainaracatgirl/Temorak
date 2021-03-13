@@ -29,9 +29,11 @@
 
     <section>
         <img type="texture" name="grass" src="textures/grass.png">
-        <img type="texture" name="dirt" src="textures/dirt.png">
-        <img type="texture" name="gravel" src="textures/gravel.png">
+        <img type="texture" name="stone" src="textures/stone.png">
+        <img type="texture" name="deepstone" src="textures/deepstone.png">
+        <img type="texture" name="deeperstone" src="textures/deeperstone.png">
         <img type="texture" name="sand" src="textures/sand.png">
+        <img type="texture" name="water" src="textures/water.png">
 
         <img type="texture" name="player_wh" src="textures/player_wh.png">
         <img type="texture" name="heart" src="textures/heart.png">
@@ -41,6 +43,8 @@
     <!-- IE check to disable the game from trying to run and corrupt the servers -->
     <script>function ieversion(){return navigator.userAgent.indexOf("Trident")!=-1}if(ieversion()){alert("This game DOES NOT run on ancient browsers like Internet Explorer. You have been warned, do not expect the game to even try to run.");document.scripts[1].removeNode();}</script>
 
+    <script src='http://git.io/perlin.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js' crossorigin="anonymous"></script>
     <script type="module" src="js/main.js"></script>
 </body>
 </html>
