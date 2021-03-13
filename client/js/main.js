@@ -9,6 +9,7 @@ import input from './input.js';
 import networking from './networking.js';
 
 const VERSION = "v0.1.14";
+const SEED = 'temorak';
 
 const world = {
     tiles: [],
@@ -30,22 +31,25 @@ const camera = {
     old_stamina: 10,
     hp_shake: 0,
     stamina_shake: 0,
-    isDead: false
-}
+    isDead: false,
+
+    inventory: []
+};
 let deathScreenAlpha = 1;
 window.camera = camera;
 
 const canvas = document.getElementById('content');
 dimensions.init(canvas);
-tiles.init(world);
-const inputGamepad = gamepad.init();
-const inputAll = input.init(inputGamepad);
 networking.init({
     version_str: VERSION
 });
 
+tiles.init(world, SEED);
+const inputGamepad = gamepad.init();
+const inputAll = input.init(inputGamepad);
+
 render.init(canvas, 
-    /** @param {CanvasRenderingContext2D} ctx */ (ctx) => {
+    /** @param {CanvasRenderingContext2D} ctx */ async (ctx) => {
     tick();
 
     const PIXELS_PER_ROW = canvas.width / dimensions.TILE_W * 4;
@@ -79,7 +83,7 @@ render.init(canvas,
     ctx.save();
     {
         ctx.translate(canvas.width / 4, canvas.height - 70);
-        ctx.fillRect(0, 0, canvas.width / 2, 64);
+        ctx.fillRect(0, 0, 460, 64);
         ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
         ctx.fillRect(196, 8, 48, 48);
         ctx.fillRect(196+64, 8, 48, 48);
@@ -107,7 +111,7 @@ render.init(canvas,
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 });
 
-function tick() {
+async function tick() {
     camera._x = dimensions.serp(camera._x, camera.x, 2);
     camera._y = dimensions.serp(camera._y, camera.y, 2);
     camera._dir = dimensions.lerp(camera._dir, camera.dir, 0.25);
@@ -168,6 +172,11 @@ function tick() {
         if (inputAll.motion_axis[0] != 0)
             camera.dir = inputAll.motion_axis[0] * -1;
         camera.rot = inputAll.motion_axis[1] * -90;
+
+        if (inputAll.motion_axis[0] != 0 || inputAll.motion_axis[1] != 0) {
+            world.tiles = [];
+            tiles.init(world, SEED, Math.round(camera.x/16), Math.round(camera.y/16));
+        }
     }
 
     if (inputGamepad.gamepads.length > 0) {
@@ -176,3 +185,14 @@ function tick() {
         document.getElementById('gamepad-icon').hidden = true;
     }
 }
+
+document.getElementById('chat-message-div').addEventListener('keyup', (e => {
+    if (e.key == 'Enter') {
+        const message = document.getElementById('chat-message-div').textContent;
+        document.getElementById('chat-message-div').textContent = "";
+
+        if (message.trim() != "")
+            console.log(message);
+        document.getElementById('content').focus();
+    }
+}));
