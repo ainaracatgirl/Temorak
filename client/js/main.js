@@ -8,7 +8,7 @@ import gamepad from './gamepad.js';
 import input from './input.js';
 import networking from './networking.js';
 
-const VERSION = "v0.1.14";
+const VERSION = "v0.1.15";
 const SEED = 'temorak';
 
 const world = {
@@ -175,7 +175,7 @@ async function tick() {
 
         if (inputAll.motion_axis[0] != 0 || inputAll.motion_axis[1] != 0) {
             world.tiles = [];
-            tiles.init(world, SEED, Math.round(camera.x/16), Math.round(camera.y/16));
+            tiles.init(world, SEED, camera.x/16, camera.y/16);
         }
     }
 

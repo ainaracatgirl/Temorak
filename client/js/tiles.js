@@ -5,7 +5,7 @@ export default {
         const MAP_SIZE = 20;
         for (let x = -MAP_SIZE; x <= MAP_SIZE; x++) {
             for (let y = -MAP_SIZE; y < MAP_SIZE; y++) {
-                const height = perlin.get((x+ox) / 1024, (y+oy) / 1024);
+                const height = perlin.get((x+ox) / 4096, (y+oy) / 4096) * 4;
                 let tiletype = 'grass';
                 if (height < -0.005) tiletype = 'sand';
                 if (height < -0.01) tiletype = 'water';
