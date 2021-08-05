@@ -1,3 +1,5 @@
+**TEMORAK has been cancelled, archiving this repository...**
+
 # Temorak
 Survival and adventure game, you're a nomad ghost that's trapped in an island and you need to survive. Discover all the secrets in the TEMORAK world!
 
